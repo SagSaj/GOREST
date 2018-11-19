@@ -2,8 +2,6 @@ package main
 
 import (
 	re "REST"
-	"fmt"
-	"os"
 )
 
 //export
@@ -14,20 +12,20 @@ const (
 //var s mongo.SessionGame
 func main() {
 	//mongo.InitiateSession()
-	go re.GoServerListen()
-	var guessColor string
-	for {
-		if _, err := fmt.Scanf("%s", &guessColor); err != nil {
-			fmt.Printf("%s\n", err)
-			return
-		}
-		if "exit" == guessColor {
-			os.Exit(0)
-			return
-		}
-		if "drop" == guessColor {
-			re.DropBase()
-			return
-		}
-	}
+	re.GoServerListen()
+	//var guessColor string
+	// for {
+	// 	if _, err := fmt.Scanf("%s", &guessColor); err != nil {
+	// 		fmt.Printf("%s\n", err)
+	// 		return
+	// 	}
+	// 	if "exit" == guessColor {
+	// 		os.Exit(0)
+	// 		return
+	// 	}
+	// 	if "drop" == guessColor {
+	// 		re.DropBase()
+	// 		return
+	// 	}
+	// }
 }

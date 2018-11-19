@@ -928,6 +928,7 @@ func GoServerListen() {
 	mapSit = make(map[string]MessageoutSit, 2)
 	INI_ID = 0
 	port := os.Getenv("PORT")
+	LogString(string(port), "Enter")
 	if port == "" {
 		port = serverString
 	}

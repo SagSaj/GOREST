@@ -21,7 +21,7 @@ type SessionGame struct {
 
 //var session *mgo.Session
 var err error
-var dBName = "dueler"
+var dBName = "duller"
 
 func init() {
 	/* session, err := mgo.Dial("127.0.0.1")

@@ -21,7 +21,7 @@ type SessionGame struct {
 
 //var session *mgo.Session
 var err error
-var dBName = "duller"
+var dBName = "DB"
 
 func init() {
 	/* session, err := mgo.Dial("127.0.0.1")
@@ -49,7 +49,6 @@ func GetMongoSession() *mgo.Session {
 		if err != nil {
 			log.Fatal("Failed to start the Mongo session")
 		}
-		mgoSession.SetSafe(&mgo.Safe{})
 	}
 	return mgoSession.Clone()
 }

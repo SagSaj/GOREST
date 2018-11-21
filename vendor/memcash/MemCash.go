@@ -253,13 +253,17 @@ func init() {
 	go DeleteLongTocken()
 }
 func DeleteLongTocken() {
-	log.Println("LogMemCashStarted")
+	i := 0
 	for true {
 
 		t.Sleep(60 * t.Second * 2)
-		log.Println("LogMemCash Was " + strconv.Itoa(len(Arena.Arena)))
+
+		if i != len(Arena.Arena) {
+			log.Println("LogMemCash " + strconv.Itoa(len(Arena.Arena)))
+			i = len(Arena.Arena)
+		}
+
 		go Arena.DeleteByTimeout()
-		log.Println("LogMemCash Become " + strconv.Itoa(len(Arena.Arena)))
 	}
 }
 func (a *ArenaService) FindArena(Toc string) *ArenaInformation {

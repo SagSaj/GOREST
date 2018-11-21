@@ -27,16 +27,19 @@ func init() {
 	go DeleteLongTocken()
 }
 func DeleteLongTocken() {
-	log.Println("LogLongTokenStarted")
+	i := 0
 	for true {
 		time.Sleep(60 * time.Second * 5)
-		log.Println("LogLongToken Was " + strconv.Itoa(len(ServicePerson)))
+		if i != len(ServicePerson) {
+			log.Println("LogLongToken " + strconv.Itoa(len(ServicePerson)))
+			i = len(ServicePerson)
+		}
+
 		for key, e := range ServicePerson {
-			if time.Now().Sub(e.TimeActivity).Minutes() > float64(60) {
+			if time.Now().Sub(e.TimeActivity).Minutes() > float64(180) {
 				delete(ServicePerson, key)
 			}
 		}
-		log.Println("LogLongToken Become " + strconv.Itoa(len(ServicePerson)))
 	}
 }
 

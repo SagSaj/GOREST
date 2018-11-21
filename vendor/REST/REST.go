@@ -317,7 +317,7 @@ func HandleFunctionGetMod(w http.ResponseWriter, r *http.Request) {
 	Параметры от клиента: нет
 	Ответ сервера: файл модификации в бинарном формате.
 	*/
-	data, err := ios.ReadFile("Историяразм.psd")
+	data, err := ios.ReadFile("Dueler.zip")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -928,7 +928,6 @@ func GoServerListen() {
 	mapSit = make(map[string]MessageoutSit, 2)
 	INI_ID = 0
 	port := os.Getenv("PORT")
-	LogString(string(port), "Enter")
 	if port == "" {
 		port = serverString
 	}

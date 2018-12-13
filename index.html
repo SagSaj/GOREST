@@ -1,7 +1,7 @@
  <head>
   <meta charset="utf-8">
   <title>Тег INPUT</title>
-<link rel="stylesheet" href="/resources/style.css">
+<link rel="stylesheet" href="style.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     function submitform() {
@@ -24,20 +24,39 @@
 </script>
  </head>
  <body>
-
+<div class = "centerblock">
+<div class="logo"></div>
+<div class = "centerblockindiv">
+    <div class="marginclass"></div>
+    <div class="marginclass"></div>
 <form method="post" onSubmit="return false" action="#" name="form1" id="form1">
-    <p><b>Ваш email:</b><br>
-        <input type="text" name="login" size="40">
-    </p>
-    <p><b>Пароль:</b><br>
-        <input type="password" name="password" size="40">
-    </p>
+    <div>
+        <img class="icons"src="img/logicon.png"></img>
+        <input class="textinsertion" placeholder="E-mail" type="text" name="login">
+    </div>
+        <div class = "underline"></div>
+        <div class = "marginclass"></div>
+    <div>
+        <img class="icons" src="img/passicon.png"></img>
+        <input class="textinsertion" type="password" placeholder="Password" name="password" id="password">
+    </div>
+        <div class="underline"></div>
+        <div class="marginclass"></div>
+    
+    <div>
+        <img class="icons" src="img/passconficon.png"></img>
+        <input class="textinsertion" placeholder="Confirm password" type="password" id="password2">
+    </div>
+        <div class="underline"></div>
+        <div class="marginclass"></div>
+        <div class="marginclass"></div>
+        <div class="marginclass"></div>
+        <div class="centerblockindiv2">
+            <input class="submitclass" type="submit" value="Register" onclick="submitform()">
+        </div>
     <input type="hidden" name="auth_method" value="password">
-    <input type="hidden" name="referal" value={{.Referal}}>
-    <p><b>Подтвердите пароль:</b><br>
-        <input type="password" size="40">
-    </p>
-    <p><input type="submit" value="Отправить" onclick="submitform()"></p>
+    <!-- <input type="hidden" name="referal" value={{.Referal}}> -->
+</div>
 </form>
-
- </body>
+</div>
+</body>

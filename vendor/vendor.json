@@ -8,12 +8,12 @@
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "U+mCE9shSFvpP2t9zSQBVXEp9yM=",
+			"checksumSHA1": "C94RJyc+BvK4ogW4bnix6RNc/xA=",
 			"path": "PersonStruct",
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "xWvWkPyorBRTPwhd4Z361jLH+yo=",
+			"checksumSHA1": "Bot5QQf9jEnvRXnSV6J84NBraFY=",
 			"path": "REST",
 			"revision": ""
 		},
@@ -53,12 +53,12 @@
 			"revisionTime": "2018-07-05T11:36:04Z"
 		},
 		{
-			"checksumSHA1": "MZC++m0ov0S7Un1XlNLXrAZvFME=",
+			"checksumSHA1": "fX8/IxFljF/M2WYldfhDJBpsC1Y=",
 			"path": "memcash",
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "Ke6t3MGgLVpf50P91NFgSqsjdbI=",
+			"checksumSHA1": "KKDg6OD5g4sVJiJFlsYHEG8p9+s=",
 			"path": "memcashparry",
 			"revision": ""
 		},
@@ -68,10 +68,10 @@
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "zOs3gPJDMWrp/Tiug7dAe8d8+Qs=",
+			"checksumSHA1": "UQJzzU1OzP8YwJwnweuVHE4B85g=",
 			"path": "subdmongo",
 			"revision": ""
 		}
 	],
-	"rootPath": "mainREST"
+	"rootPath": "mainrest"
 }

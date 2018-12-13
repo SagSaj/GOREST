@@ -2,14 +2,16 @@ package PersonStruct
 
 import (
 	"fmt"
+	"generatetoken"
 	"hash/fnv"
 	"log"
 	"strconv"
 	mongo "subdmongo"
+	"sync"
 	"time"
-
-	"generatetoken"
 )
+
+var mutex = &sync.Mutex{}
 
 type PersonsBalance struct {
 	Balance float32
@@ -84,7 +86,9 @@ func InsertPerson(login, password string) (Person, error) {
 	p.LoseCount = l.LoseCount
 	p.AccountID = l.IDAccount
 	p.Tocken = generateTocken(login)
+	mutex.Lock()
 	ServicePerson[p.Tocken] = &PersonService{PersonInf: &p, TimeActivity: time.Now()}
+	mutex.Unlock()
 	return p, nil
 }
 func InsertPersonWithID(login, password string, ID int) (Person, error) {
@@ -93,7 +97,6 @@ func InsertPersonWithID(login, password string, ID int) (Person, error) {
 	l, err := mongo.RegistrNewPersonWithID(login, password, ID)
 	var p Person
 	if err != nil {
-		log.Println("returnperr")
 		return p, err
 	}
 	p.Login = login
@@ -103,7 +106,9 @@ func InsertPersonWithID(login, password string, ID int) (Person, error) {
 	p.AccountID = l.IDAccount
 	p.LoseCount = l.LoseCount
 	p.Tocken = generateTocken(login)
+	mutex.Lock()
 	ServicePerson[p.Tocken] = &PersonService{PersonInf: &p, TimeActivity: time.Now()}
+	mutex.Unlock()
 	return p, nil
 }
 func DropBase() {
@@ -126,7 +131,9 @@ func FindPersonByLogin(login, password string) (Person, error) {
 	p.AccountID = l.IDAccount
 	p.LoseCount = l.LoseCount
 	p.Tocken = generateTocken(login)
+	mutex.Lock()
 	ServicePerson[p.Tocken] = &PersonService{PersonInf: &p, TimeActivity: time.Now()}
+	mutex.Unlock()
 	return p, nil
 }
 func FindPersonByToken(Toc string) (*Person, bool) {
@@ -134,7 +141,9 @@ func FindPersonByToken(Toc string) (*Person, bool) {
 	if !ok {
 		return &Person{}, false
 	}
+	mutex.Lock()
 	ServicePerson[Toc] = &PersonService{PersonInf: p.PersonInf, TimeActivity: time.Now()}
+	mutex.Unlock()
 	return p.PersonInf, true
 }
 func WinMatch(Token string, bet float32) {
@@ -173,5 +182,7 @@ func AddAccountIDLogIN(Token string, AccountID int) {
 		log.Println("Bad  tocken " + Token + " in registration")
 	}
 	p.PersonInf.AccountID = AccountID
+	mutex.Lock()
 	ServicePerson[Token] = &PersonService{PersonInf: p.PersonInf, TimeActivity: time.Now()}
+	mutex.Unlock()
 }

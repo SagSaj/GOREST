@@ -5,6 +5,7 @@ import (
 	// "fmt"
 
 	"errors"
+	gen "generatetoken"
 	"log"
 	"os"
 
@@ -97,12 +98,13 @@ func DeletebyTimeOut(ti float64) {
 
 //LoginInformation ii
 type LoginInformation struct {
-	Login     string  `bson:"login"`
-	Password  string  `bson:"password"`
-	Balance   float32 `bson:"balance"`
-	WinCount  int     `bson:"wincount"`
-	LoseCount int     `bson:"losecount"`
-	IDAccount int     `bson:"idaccount"`
+	Login         string  `bson:"login"`
+	Password      string  `bson:"password"`
+	Balance       float32 `bson:"balance"`
+	WinCount      int     `bson:"wincount"`
+	LoseCount     int     `bson:"losecount"`
+	IDAccount     int     `bson:"idaccount"`
+	ReferalPoints int     `bson:"referalpoints"`
 }
 
 //RegistrNewPerson rnp
@@ -147,8 +149,8 @@ func RegistrNewPersonWithID(login, password string, ID int) (LoginInformation, e
 		log.Println(err.Error())
 		return def, err
 	}
+	_, b, err = findPersonbyID(ID)
 	if b {
-		log.Println("Exist")
 		return def, errors.New("Exist")
 	}
 	log.Println("Add")
@@ -180,6 +182,24 @@ func FindPerson(login, password string) (LoginInformation, error) {
 }
 
 //find pers
+func findPersonbyID(ID int) (LoginInformation, bool, error) {
+	//initiateSession()
+	//defer session.Close()
+	result0 := LoginInformation{}
+	session := GetMongoSession()
+	defer session.Close()
+	c := session.DB(dBName).C("persons")
+	err = c.Find(bson.M{"ID": ID}).One(&result0)
+
+	if err != nil {
+		if err.Error() == "not found" {
+			return result0, false, nil
+		}
+		log.Println(err)
+		return result0, false, err
+	}
+	return result0, true, nil
+}
 func findPerson(login string) (LoginInformation, bool, error) {
 	//initiateSession()
 	//defer session.Close()
@@ -282,4 +302,113 @@ func GetStats() uint64 {
 		return 0
 	}
 	return p.prices
+}
+func NewNews(text string) error {
+	//	initiateSession()
+	//defer session.Close()
+	session := GetMongoSession()
+	defer session.Close()
+	c := session.DB(dBName).C("news")
+	err = c.Insert(&text)
+	if err != nil {
+		log.Println("News" + err.Error())
+		return err
+	}
+	return nil
+}
+func DropBaseNews() {
+	session := GetMongoSession()
+	defer session.Close()
+	c := session.DB(dBName).C("news")
+	err = c.DropCollection()
+	log.Println("DropCollectionNews")
+}
+func GetNews() (s []string) {
+	session := GetMongoSession()
+	defer session.Close()
+	c := session.DB(dBName).C("news")
+	err = c.Find(nil).All(&s)
+	if err != nil {
+		log.Println("GetNews" + err.Error())
+		return
+	}
+	return
+}
+
+type References struct {
+	FromLogin string `bson:"fromlogin"`
+	ToLogin   string `bson:"tologin"`
+	Referal   string `bson:"referal"`
+}
+
+func GenerateReference(login string) (s string, err error) {
+	session := GetMongoSession()
+	defer session.Close()
+	s, err = gen.GenerateRandomStringURLSafe(10)
+	if err != nil {
+		log.Println("GenerateRef" + err.Error())
+		return
+	}
+	r := References{FromLogin: login, Referal: s}
+	c := session.DB(dBName).C("references")
+	err = c.Insert(&r)
+	if err != nil {
+		log.Println("GenerateRef" + err.Error())
+		return
+	}
+	return
+}
+func CheckReference(login string, referal string) (bool, error) {
+	session := GetMongoSession()
+	defer session.Close()
+	r := References{}
+	c := session.DB(dBName).C("references")
+	err = c.Find(bson.M{"referal": referal}).One(&r)
+	if err != nil {
+		log.Println("CheckRef" + err.Error())
+		return false, err
+	}
+	if r.ToLogin != "" {
+		log.Println("reference is busy")
+		return false, errors.New("Downloaded")
+	}
+	err = c.Update(bson.M{"referal": referal}, bson.M{"$set": bson.M{"tologin": login}})
+	if err != nil {
+		log.Println("CheckRef" + err.Error())
+		return false, err
+	}
+	return true, nil
+}
+func AddReferencePoint(login string, isRegistr bool) {
+	session := GetMongoSession()
+	defer session.Close()
+	r := References{}
+	c := session.DB(dBName).C("references")
+	err = c.Find(bson.M{"tologin": login}).One(&r)
+	if err != nil {
+		log.Println("CheckRef" + err.Error())
+		return
+	}
+	if r.FromLogin == "" {
+		return
+	}
+	//log.Println(result)
+	p, ok, err := findPerson(r.FromLogin)
+	if !ok {
+		log.Println("CheckRef person is leave")
+		return
+	}
+	i := p.ReferalPoints
+
+	i += 1
+
+	c2 := session.DB(dBName).C("persons")
+	//_, err = c.Upsert(bson.M{"Login": login}, bson.M{"$set": bson.M{"LoseCount": result.LoseCount, "WinCount": result.LoseCount, "Balance": result.LoseCount}})
+	err = c2.Update(bson.M{"login": p.Login}, bson.M{"$set": bson.M{"referalpoints": i}})
+	//log.Println(GetBalance(login))
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	return
 }

@@ -3,11 +3,14 @@ package memcashparry
 import (
 	"log"
 	"strconv"
+	"sync"
 
 	//mem "memcash"
 	. "reststruct"
 	t "time"
 )
+
+var mutex = &sync.Mutex{}
 
 type Parry struct {
 	Parres []StructForREST
@@ -61,7 +64,9 @@ func AddParry(p StructForREST, arenaID string, parryType string, ToID int, FromI
 	if !ok {
 		pz := Parry{}
 		pz.AddADV(p, parryType, FromID, ToID)
+		mutex.Lock()
 		ParryMems[arenaID] = &pz
+		mutex.Unlock()
 	} else {
 		r.AddADV(p, parryType, FromID, ToID)
 	}
@@ -177,7 +182,6 @@ func VerifyActive(ArenaID string, accountIDTo int, bet float32) bool {
 	return false
 }
 
-//Ne verno
 func VerifyReject(Tocken string, ArenaID string, accountIDTo int, bet float32) {
 	p, ok := ParryMems[ArenaID]
 	if ok {
@@ -219,7 +223,6 @@ func Clear(AccountID int, ArenaID string) {
 	}
 }
 
-//PROBLEMS!!!!
 func DeleteLongTocken() {
 	i := 0
 	for true {
@@ -237,7 +240,9 @@ func DeleteLongTocken() {
 				if value.Types[index2] == "active" {
 					activeExict = true
 					if t.Now().Sub(value2.CreatedAt).Minutes() > float64(20) {
+						mutex.Lock()
 						delete(ParryMems, index)
+						mutex.Unlock()
 						break
 					}
 				}
@@ -245,7 +250,9 @@ func DeleteLongTocken() {
 			if !activeExict {
 				for _, value2 := range value.Parres {
 					if t.Now().Sub(value2.CreatedAt).Minutes() > float64(20) {
+						mutex.Lock()
 						delete(ParryMems, index)
+						mutex.Unlock()
 						break
 					}
 				}

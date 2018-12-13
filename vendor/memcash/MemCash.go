@@ -7,11 +7,13 @@ import (
 	memp "memcashparry"
 	. "reststruct"
 	"strconv"
+	"sync"
 	t "time"
 )
 
 var NewArena = 0
 var EndArena = 0
+var mutex = &sync.Mutex{}
 
 type ArenaInformation struct {
 	IDArena             string
@@ -294,8 +296,10 @@ func (a *ArenaService) FindArenaEnd(Toc string) (*ArenaInformation, bool) {
 }
 func (a *ArenaService) AddArena(Toc string) *ArenaInformation {
 	var ai ArenaInformation
+	mutex.Lock()
 	ai.ArenaInit(Toc)
 	a.Arena[Toc] = &ai
+	mutex.Unlock()
 	return &ai
 }
 

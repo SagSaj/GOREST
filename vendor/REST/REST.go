@@ -3,9 +3,12 @@ package REST
 import (
 	par "Params"
 	"PersonStruct"
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"html/template"
 	ios "io/ioutil"
+
 	"log"
 	mem "memcash"
 	memp "memcashparry"
@@ -13,13 +16,14 @@ import (
 	"os"
 	. "reststruct"
 	"strconv"
+	"strings"
 	"subdmongo"
 	"time"
 )
 
 var serverString = "8000" //5050
 func LogString(s string, funct string) {
-	log.Println("Inf " + funct + ":" + s)
+	//log.Println("Inf " + funct + ":" + s)
 }
 
 type MessageError struct {
@@ -29,6 +33,12 @@ type MessageError struct {
 //Done
 func DropBase() {
 	PersonStruct.DropBase()
+}
+
+var homepageTpl *template.Template
+
+func init() {
+
 }
 func HandleFunctionRegistration(w http.ResponseWriter, r *http.Request) {
 	//Done
@@ -52,6 +62,7 @@ func HandleFunctionRegistration(w http.ResponseWriter, r *http.Request) {
 		AuthMethod string `json:"auth_method"` // “password” или “token” (в каком поле искать пароль)
 		Token      string `json:"token"`
 		Password   string `json:"password"` // в любом запросе будет ЛИБО токен ЛИБО пароль
+		Referal    string `json:"referal"`  // в любом запросе будет ЛИБО токен ЛИБО пароль
 	}
 	type Messageout struct {
 		Token   string  `json:"token"`
@@ -60,18 +71,19 @@ func HandleFunctionRegistration(w http.ResponseWriter, r *http.Request) {
 	}
 	var m Message
 	if r.Method == "POST" {
+
 		if r.Body == nil {
 			http.Error(w, "Please send a request body", 400)
 			return
 		}
-		err := json.NewDecoder(r.Body).Decode(&m)
 
+		err := json.NewDecoder(r.Body).Decode(&m)
 		if err != nil {
 			http.Error(w, err.Error(), 400)
 			return
 		}
-		res2B, _ := json.Marshal(m)
-		LogString(string(res2B), "registration")
+		//res2B, _ := json.Marshal(m)
+		//LogString(string(res2B), "registration")
 		if m.AuthMethod == "password" {
 			//	var p PersonStruct.Person
 			p, err := PersonStruct.FindPersonByLogin(m.Login, m.Password)
@@ -100,6 +112,8 @@ func HandleFunctionRegistration(w http.ResponseWriter, r *http.Request) {
 					if err != nil {
 						http.Error(w, err.Error(), 401)
 					} else {
+						subdmongo.CheckReference(m.Login, m.Referal)
+						subdmongo.AddReferencePoint(m.Login, true)
 						w.Write(b)
 					}
 				} else {
@@ -124,12 +138,46 @@ func HandleFunctionRegistration(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 
+		} else {
+			http.Error(w, "Invalid type of registration", http.StatusBadRequest)
 		}
 
+	} else if r.Method == "GET" {
+		homepageHTML := "index.html"
+		//	name := path.Base(homepageHTML)
+		//	log.Println(name)
+		homepageTpl = template.Must(template.New("index.html").ParseFiles(homepageHTML))
+		id := strings.TrimPrefix(r.URL.Path, "/account/register/")
+		push(w, "/resources/style.css")
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		fullData := map[string]interface{}{
+			"Referal": id,
+		}
+		render(w, r, homepageTpl, "index.html", fullData)
 	} else {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 
+}
+
+// Render a template, or server error.
+func render(w http.ResponseWriter, r *http.Request, tpl *template.Template, name string, data interface{}) {
+	buf := new(bytes.Buffer)
+	if err := tpl.ExecuteTemplate(buf, name, data); err != nil {
+		fmt.Printf("\nRender Error: %v\n", err)
+		return
+	}
+	w.Write(buf.Bytes())
+}
+
+// Push the given resource to the client.
+func push(w http.ResponseWriter, resource string) {
+	pusher, ok := w.(http.Pusher)
+	if ok {
+		if err := pusher.Push(resource, nil); err == nil {
+			return
+		}
+	}
 }
 
 //Done
@@ -172,8 +220,8 @@ func HandleFunctionLogin(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), 400)
 			return
 		}
-		res2B, _ := json.Marshal(m)
-		LogString(string(res2B), "Login")
+		//res2B, _ := json.Marshal(m)
+		//LogString(string(res2B), "Login")
 		if m.AuthMethod == "token" {
 			//	var p PersonStruct.Person
 			p, ok := PersonStruct.FindPersonByToken(m.Token)
@@ -211,7 +259,6 @@ func HandleFunctionLogin(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Println(err.Error())
 				if err.Error() == "not found" {
-					log.Println("sad")
 					mo := MessageError{Error: "WRONG_ACCOUNT_ID"}
 					b, err := json.Marshal(mo)
 					if err != nil {
@@ -226,7 +273,21 @@ func HandleFunctionLogin(w http.ResponseWriter, r *http.Request) {
 				}
 			} else {
 				//Add AccountID
-				PersonStruct.AddAccountIDLogIN(p.Tocken, m.AccountID)
+				if p.AccountID == 0 {
+					PersonStruct.AddAccountIDLogIN(p.Tocken, m.AccountID)
+				} else {
+					if p.AccountID != m.AccountID {
+						mo := MessageError{Error: "WRONG_ACCOUNT_ID"}
+						b, err := json.Marshal(mo)
+						if err != nil {
+							http.Error(w, err.Error(), 401)
+						} else {
+							w.Write(b)
+						}
+						return
+					}
+				}
+
 				mo := Messageout{
 					Balance: p.Balance,
 					Status:  "ok",
@@ -234,10 +295,10 @@ func HandleFunctionLogin(w http.ResponseWriter, r *http.Request) {
 				}
 				b, err := json.Marshal(mo)
 				if err == nil {
-					LogString(string(b), "Login")
+					//	LogString(string(b), "Login")
 					w.Write(b)
 				} else {
-					LogString(string(b), "Login")
+					//	LogString(string(b), "Login")
 					http.Error(w, err.Error(), 400)
 				}
 			}
@@ -279,8 +340,8 @@ func HandleFunctionBalance(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), 400)
 			return
 		}
-		res2B, _ := json.Marshal(m)
-		LogString(string(res2B), "Balance")
+		//res2B, _ := json.Marshal(m)
+		//LogString(string(res2B), "Balance")
 		p, ok := PersonStruct.FindPersonByToken(m.Token)
 		if !ok {
 
@@ -299,7 +360,7 @@ func HandleFunctionBalance(w http.ResponseWriter, r *http.Request) {
 		}
 		b, err := json.Marshal(mo)
 		if err == nil {
-			LogString(string(b), "Balance")
+			//	LogString(string(b), "Balance")
 			w.Write(b)
 		} else {
 			http.Error(w, err.Error(), 400)
@@ -317,11 +378,18 @@ func HandleFunctionGetMod(w http.ResponseWriter, r *http.Request) {
 	Параметры от клиента: нет
 	Ответ сервера: файл модификации в бинарном формате.
 	*/
-	data, err := ios.ReadFile("Dueler.zip")
-	if err != nil {
-		log.Fatal(err)
+	id := strings.TrimPrefix(r.URL.Path, "/getmod/")
+	if id == "Dueler.zip" {
+		data, err := ios.ReadFile("Dueler.zip")
+		if err != nil {
+			log.Println(err.Error())
+		}
+		//log.Println("Modification was sending")
+		w.Write(data)
+	} else {
+		http.Error(w, "Invalid request", http.StatusMethodNotAllowed)
 	}
-	w.Write(data)
+
 }
 
 //Done
@@ -355,8 +423,8 @@ func HandleFunctionArenaEnter(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), 400)
 			return
 		}
-		res2B, _ := json.Marshal(m)
-		LogString(string(res2B), "Enter")
+		//	res2B, _ := json.Marshal(m)
+		//	LogString(string(res2B), "Enter")
 
 		//
 		a := mem.Arena.FindArena(strconv.Itoa(m.ArenaID))
@@ -372,16 +440,14 @@ func HandleFunctionArenaEnter(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		(a).AddNewTockenWithoutTeam(p.AccountID)
-		log.Println("Enter")
 		a = mem.Arena.FindArena(strconv.Itoa(m.ArenaID))
-		log.Println(a.GetEnemiesWithoutTeam())
 		//
 		mo := Messageout{
 			Status: "ok",
 		}
 		b, err := json.Marshal(mo)
 		if err == nil {
-			LogString(string(b), "Enter")
+			//	LogString(string(b), "Enter")
 			w.Write(b)
 		} else {
 			http.Error(w, err.Error(), 400)
@@ -516,13 +582,6 @@ func HandleFunctionArenaSituation(w http.ResponseWriter, r *http.Request) {
 
 		b, err := json.Marshal(mo)
 		if err == nil {
-			temp, ok := mapSit[m.Token]
-			if ok {
-				if len(temp.Pending) != len(mo.Pending) || len(temp.Active) != len(mo.Active) || len(temp.Incoming) != len(mo.Incoming) {
-					LogString(string(b), "Situation")
-				}
-			}
-			mapSit[m.Token] = mo
 
 			w.Write(b)
 		} else {
@@ -593,8 +652,8 @@ func HandleFunctionParry(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), 400)
 			return
 		}
-		res2B, _ := json.Marshal(m)
-		LogString(string(res2B), "Parry")
+		//res2B, _ := json.Marshal(m)
+		//	LogString(string(res2B), "Parry")
 		//Verify
 		p, ok := PersonStruct.FindPersonByToken(m.Token)
 		if !ok {
@@ -626,6 +685,7 @@ func HandleFunctionParry(w http.ResponseWriter, r *http.Request) {
 				value := massI[0]
 
 				if memp.VerifyActive(are, value.ToAccountID, value.BetValue) {
+					subdmongo.AddReferencePoint(p.Login, false)
 					a.AddNewParry(value.FromAccountID, value.ToAccountID, value.BetValue)
 				}
 			}
@@ -705,7 +765,7 @@ func HandleFunctionParry(w http.ResponseWriter, r *http.Request) {
 		b, err := json.Marshal(mo)
 
 		if err == nil {
-			LogString(string(b), "Parry")
+			//	LogString(string(b), "Parry")
 			w.Write(b)
 		} else {
 			http.Error(w, err.Error(), 400)
@@ -729,11 +789,11 @@ func HandleFunctionArenaQuit(w http.ResponseWriter, r *http.Request) {
 	{“status”: “ok” // “INVALID_TOKEN”}*/
 
 	type Message struct {
-		ArenaID int
-		Token   string
+		ArenaID int    `json:"arenaID"`
+		Token   string `json:"token"`
 	}
 	type Messageout struct {
-		Status string
+		Status string `json:"status"`
 	}
 	if r.Method == "POST" {
 		var m Message
@@ -746,8 +806,8 @@ func HandleFunctionArenaQuit(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), 400)
 			return
 		}
-		res2B, _ := json.Marshal(m)
-		LogString(string(res2B), "Quit")
+		//res2B, _ := json.Marshal(m)
+		//LogString(string(res2B), "Quit")
 		//
 		a, ok := mem.Arena.FindArenaEnd(strconv.Itoa(m.ArenaID))
 		stans := "ok"
@@ -763,7 +823,7 @@ func HandleFunctionArenaQuit(w http.ResponseWriter, r *http.Request) {
 		b, err := json.Marshal(mo)
 
 		if err == nil {
-			LogString(string(b), "Quit")
+			//LogString(string(b), "Quit")
 			w.Write(b)
 		} else {
 			http.Error(w, err.Error(), 400)
@@ -828,8 +888,8 @@ func HandleFunctionArenaResult(w http.ResponseWriter, r *http.Request) {
 			}
 			return
 		}
-		res2B, _ := json.Marshal(m)
-		LogString(string(res2B), "result")
+		//res2B, _ := json.Marshal(m)
+		//LogString(string(res2B), "result")
 		//
 		a := mem.Arena.FindArena(strconv.Itoa(m.ArenaID))
 		tempArray := memp.GetActive(a.IDArena, p.AccountID)
@@ -874,7 +934,7 @@ func HandleFunctionArenaResult(w http.ResponseWriter, r *http.Request) {
 		mtemp := Messageout2{Arena: mo, Status: "ok"}
 		c, err := json.Marshal(mtemp)
 		//c, err := json.Marshal(mo)
-		LogString(string(c), "result")
+		//LogString(string(c), "result")
 		if err == nil {
 			w.Write(c)
 		} else {
@@ -920,20 +980,78 @@ func HandleFunctionStatAllBets(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+const HTTPserverpathGetMod = "/account/register/"
+
+func HandleFunctionGetHashMod(w http.ResponseWriter, r *http.Request) {
+
+	type Message struct {
+		Token string `json:"token"`
+	}
+	type Messageout struct {
+		Reference string `json:"reference"`
+	}
+	if r.Method == "POST" {
+		var m Message
+		if r.Body == nil {
+			http.Error(w, "Please send a request body", 400)
+			return
+		}
+		err := json.NewDecoder(r.Body).Decode(&m)
+		if err != nil {
+			http.Error(w, err.Error(), 400)
+			return
+		}
+		//
+		p, ok := PersonStruct.FindPersonByToken(m.Token)
+		if !ok {
+
+			mo := MessageError{Error: "INVALID_TOKEN"}
+			b, err := json.Marshal(mo)
+			if err != nil {
+				http.Error(w, err.Error(), 401)
+			} else {
+				w.Write(b)
+			}
+			return
+		}
+		str, err := subdmongo.GenerateReference(p.Login)
+		if err != nil {
+			log.Println(err.Error())
+			http.Error(w, err.Error(), 400)
+		}
+		stans := r.Host + HTTPserverpathGetMod + str
+		//
+		mo := Messageout{
+			Reference: stans,
+		}
+		b, err := json.Marshal(mo)
+
+		if err == nil {
+			//LogString(string(b), "Quit")
+			w.Write(b)
+		} else {
+			http.Error(w, err.Error(), 400)
+		}
+
+	} else {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+	}
+}
+
 //Done
 func GoServerListen() {
 	/*GET /currentVersion
 	Параметры от клиента: нет
 	Ответ сервера: строка вида v.1.0.0 */
-	mapSit = make(map[string]MessageoutSit, 2)
+	//mapSit = make(map[string]MessageoutSit, 2)
 	INI_ID = 0
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = serverString
+		port = ":" + serverString
+	} else {
+		port = ":" + port
 	}
 	http.HandleFunc("/currentVersion/", func(w http.ResponseWriter, r *http.Request) {
-
-		log.Println("GetVersion")
 		fmt.Fprintf(w, par.CurrentVersion)
 	}) //tested
 	http.HandleFunc("/StatsAllPersons/", HandleFunctionStatAllPerson)       //tested
@@ -948,16 +1066,14 @@ func GoServerListen() {
 	http.HandleFunc("/arena/enter/", HandleFunctionArenaEnter)
 	http.HandleFunc("/arena/situation/", HandleFunctionArenaSituation)
 	http.HandleFunc("/parry/", HandleFunctionParry)
+	http.HandleFunc("/gethashmod/", HandleFunctionGetHashMod)
 	http.HandleFunc("/arena/quit/", HandleFunctionArenaQuit)
 	http.HandleFunc("/arena/result/", HandleFunctionArenaResult)
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-
-		log.Println("Strange", r.RequestURI)
-		fmt.Fprintf(w, r.RequestURI)
-	})
-
+	//fs
+	fs := http.FileServer(http.Dir("./resources"))
+	http.Handle("/resources/", http.StripPrefix("/resources/", fs))
 	log.Println("Started")
-	if err := http.ListenAndServe(":"+port, nil); err != nil {
+	if err := http.ListenAndServe(port, nil); err != nil {
 		log.Fatal(err)
 	}
 

@@ -1,0 +1,43 @@
+ <head>
+  <meta charset="utf-8">
+  <title>Тег INPUT</title>
+<link rel="stylesheet" href="/resources/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function submitform() {
+        var v = $("#form1").serializeArray()
+        var b = v.reduce((res, el) => {
+            res[el.name] = el.value;
+            return res;
+        }, {})
+        var formData = JSON.stringify(b);
+        fetch("#",
+            {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: formData
+            })
+    }
+</script>
+ </head>
+ <body>
+
+<form method="post" onSubmit="return false" action="#" name="form1" id="form1">
+    <p><b>Ваш email:</b><br>
+        <input type="text" name="login" size="40">
+    </p>
+    <p><b>Пароль:</b><br>
+        <input type="password" name="password" size="40">
+    </p>
+    <input type="hidden" name="auth_method" value="password">
+    <input type="hidden" name="referal" value={{.Referal}}>
+    <p><b>Подтвердите пароль:</b><br>
+        <input type="password" size="40">
+    </p>
+    <p><input type="submit" value="Отправить" onclick="submitform()"></p>
+</form>
+
+ </body>

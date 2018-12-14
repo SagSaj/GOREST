@@ -13,7 +13,6 @@ import (
 	mem "memcash"
 	memp "memcashparry"
 	"net/http"
-	"os"
 	. "reststruct"
 	"strconv"
 	"strings"
@@ -1040,17 +1039,15 @@ func HandleFunctionGetHashMod(w http.ResponseWriter, r *http.Request) {
 }
 
 //Done
-func GoServerListen() {
+func GoServerListen(port string) {
 	/*GET /currentVersion
 	Параметры от клиента: нет
 	Ответ сервера: строка вида v.1.0.0 */
 	//mapSit = make(map[string]MessageoutSit, 2)
 	INI_ID = 0
-	port := os.Getenv("PORT")
+
 	if port == "" {
-		port = "localhost:" + serverString
-	} else {
-		port = ":" + port
+		port = ":" + serverString
 	}
 	http.HandleFunc("/currentVersion/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, par.CurrentVersion)

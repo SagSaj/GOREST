@@ -14,7 +14,8 @@ const (
 //var s mongo.SessionGame
 func main() {
 	//mongo.InitiateSession()
-	go re.GoServerListen()
+	port := os.Getenv("PORT")
+	go re.GoServerListen(port)
 	var guessColor string
 	for {
 		if _, err := fmt.Scanf("%s", &guessColor); err != nil {

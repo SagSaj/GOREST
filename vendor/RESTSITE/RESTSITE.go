@@ -10,7 +10,6 @@ import (
 
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 	"subdmongo"
@@ -460,16 +459,13 @@ func HandleFunctionDueler(w http.ResponseWriter, r *http.Request) {
 }
 
 //Done
-func GoServerListen() {
+func GoServerListen(port string) {
 	/*GET /currentVersion
 	Параметры от клиента: нет
 	Ответ сервера: строка вида v.1.0.0 */
 	//mapSit = make(map[string]MessageoutSit, 2)
-	port := os.Getenv("PORT")
 	if port == "" {
-		port = "localhost:" + serverString
-	} else {
-		port = ":" + port
+		port = ":" + serverString
 	}
 	//http.HandleFunc("/StatsAllPersons/", HandleFunctionStatAllPerson)       //tested
 	//http.HandleFunc("/StatsActivePersons/", HandleFunctionStatActivePerson) //tested

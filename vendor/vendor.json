@@ -3,10 +3,6 @@
 	"ignore": "test",
 	"package": [
 		{
-			"path": "C",
-			"revision": ""
-		},
-		{
 			"checksumSHA1": "3ec1DHc2RZzLZFcDs5DIb8cXq84=",
 			"path": "Params",
 			"revision": ""
@@ -24,66 +20,6 @@
 		{
 			"checksumSHA1": "z8JPPRtwB9HBWjfKTF/gjjcCBgE=",
 			"path": "RESTSITE",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "jU6hnuOzIuq3frbgM7UyVp/3ofQ=",
-			"path": "bytes",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "2KnzteqU9MvUHBqHOK/WP/hcWyM=",
-			"path": "crypto/hmac",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "/Dp4Vd6LqILOvgpjDOM5AFN3M1E=",
-			"path": "crypto/md5",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "lT7TmTm+V5idqYqPZ2gHCOaVBVk=",
-			"path": "crypto/rand",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "BRMwrmeJC4bz4t/wxotTZCs8FLc=",
-			"path": "crypto/sha1",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "p+hh6nSbs6Qc4f6JKmxG8RtKiEg=",
-			"path": "encoding",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "iW/e3GAeABpsUA+ZYeMfcGsR8OI=",
-			"path": "encoding/base64",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "zg/5qtMna3tN3hiQcwiR6pr6Qao=",
-			"path": "encoding/binary",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "h2CT+Ur0C19nJGIZPbz9tIM+/tY=",
-			"path": "encoding/hex",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "gvd0wPzX9YWg/3fgukl+S3yfBgM=",
-			"path": "encoding/json",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "/IgtMOBRqTxEAfVs7ATBXQMVRf4=",
-			"path": "errors",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "mzoFlp43xtAjBf1Xc+iWtjRMjRs=",
-			"path": "fmt",
 			"revision": ""
 		},
 		{
@@ -122,45 +58,10 @@
 			"revisionTime": "2018-07-05T11:36:04Z"
 		},
 		{
-			"checksumSHA1": "8uDqGC/VPYyRXlZlyte2MgShGlk=",
-			"path": "hash",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "ZVi34IsQwwef75vda9YNHlZPDZg=",
-			"path": "hash/fnv",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "Jl/g4ko7g59EzmDSbV88OGp1yeY=",
-			"path": "html/template",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "zQMMnVrjkV4jxCbMPSyMMpvVRVQ=",
-			"path": "io",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "cncTBQuqslugM/9QKe5YHBPgVv8=",
-			"path": "io/ioutil",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "Lkudhk1kbtQBNP/ziEDEBNJcbUU=",
-			"path": "log",
-			"revision": ""
-		},
-		{
 			"checksumSHA1": "plpgbgN2yHU0WMUr9/daA0GAfcU=",
 			"path": "mainrest",
-			"revision": "753e5e23106e3f9ced0c58797307f501f2267f33",
-			"revisionTime": "2018-12-14T17:37:49Z"
-		},
-		{
-			"checksumSHA1": "dNFboLKpBHH2MKG8ltwjwEgKMpQ=",
-			"path": "math",
-			"revision": ""
+			"revision": "4760dba11b75c7398f67af3964c0643fb1ab14cd",
+			"revisionTime": "2018-12-14T17:57:53Z"
 		},
 		{
 			"checksumSHA1": "fX8/IxFljF/M2WYldfhDJBpsC1Y=",
@@ -173,93 +74,13 @@
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "z8WuvG5qD2FWBlTePRl1B/ZdcNk=",
-			"path": "net",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "FeZAPq7SwErynZNEV3B/vLgZt0s=",
-			"path": "net/http",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "xl1tJ50oLPOnLV8WOn8vC1EsIkA=",
-			"path": "net/url",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "LNMKMmYYNipI1DkDqO7BmcLak6U=",
-			"path": "os",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "dMdfpc+CsuwljoA2r+P1gCMaUcg=",
-			"path": "reflect",
-			"revision": ""
-		},
-		{
 			"checksumSHA1": "bQWmxZB8hZFIW1MZqKW+NgbMPs0=",
 			"path": "reststruct",
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "ZDRkIPR2kVQEwj99L4Zw6sNMBTo=",
-			"path": "runtime",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "0WX971Ncla/oFW29ZZ47Rk7EXZA=",
-			"path": "sort",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "Gps8k7PeSyB5nUosByXnR6E3V7M=",
-			"path": "strconv",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "q8h4iJ75oew7ecyB0G99ZM1lqqo=",
-			"path": "strings",
-			"revision": ""
-		},
-		{
 			"checksumSHA1": "QDZxE9ygUtM5txi18hYBU4Q9jsA=",
 			"path": "subdmongo",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "+qf020Ow5odd704VxxaXGC+uxg4=",
-			"path": "sync",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "m1StJBuv862BHDLTbw1rHTD5m20=",
-			"path": "sync/atomic",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "ccs6vzzKEaHQVjmN3iKCu6ac+cI=",
-			"path": "time",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "PEG5E223Bpo4MPvgqg7ryYwcqYE=",
-			"path": "unicode",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "c2Sw2+m89l/+H4v+xKHmri87Uw8=",
-			"path": "unicode/utf16",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "U7NVfywr2wNpfQFZFCeDdorVIm4=",
-			"path": "unicode/utf8",
-			"revision": ""
-		},
-		{
-			"checksumSHA1": "3A8sGLHVhyNfHY64cVKXreHBBdU=",
-			"path": "unsafe",
 			"revision": ""
 		}
 	],

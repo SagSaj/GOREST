@@ -1,62 +1,116 @@
+
+ <html>
  <head>
   <meta charset="utf-8">
-  <title>Тег INPUT</title>
-<link rel="stylesheet" href="style.css">
+  <title>Challenger</title>
+<link rel="stylesheet" href="resources/styleindex.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
-    function submitform() {
-        var v = $("#form1").serializeArray()
-        var b = v.reduce((res, el) => {
-            res[el.name] = el.value;
-            return res;
-        }, {})
-        var formData = JSON.stringify(b);
-        fetch("#",
-            {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                method: "POST",
-                body: formData
-            })
+    function clickbuttoncont(){
+        var el = document.getElementById("buttoncontact");
+        var el2 = document.getElementById("textbuttoncontact");
+        var el3 = document.getElementById("contactinformation")
+        if(el3.style.visibility  != "visible"){
+            el.src = "resources/imgindex/buttondown.png";
+            el2.style.color = "black"
+            el3.style.visibility = "visible";
+        } else {
+            el.src = "resources/imgindex/buttonup.png";
+            el2.style.color = "white"
+            el3.style.visibility = "hidden";
+        }
     }
+    function clickbuttonres() {
+            var el = document.getElementById("buttonproduct");
+            var el2 = document.getElementById("textbuttonproduct");
+            var el3 = document.getElementById("contactinformation2")
+            if (el3.style.visibility != "visible") {
+                el.src = "resources/imgindex/buttondown.png";
+                el2.style.color = "black"
+                el3.style.visibility = "visible";
+            } else {
+                el.src = "resources/imgindex/buttonup.png";
+                el2.style.color = "white"
+                el3.style.visibility = "hidden";
+            }
+        }
 </script>
  </head>
  <body>
-<div class = "centerblock">
-<div class="logo"></div>
-<div class = "centerblockindiv">
-    <div class="marginclass"></div>
-    <div class="marginclass"></div>
-<form method="post" onSubmit="return false" action="#" name="form1" id="form1">
-    <div>
-        <img class="icons"src="img/logicon.png"></img>
-        <input class="textinsertion" placeholder="E-mail" type="text" name="login">
+<div id="divbutton1">
+    <div id="divbutton2" onclick="clickbuttoncont()">
+        <img id="buttoncontact" src="resources/imgindex/buttonup.png" ></img>
+        <p id="textbuttoncontact" class="texted centered">CONTACT US</p>
     </div>
-        <div class = "underline"></div>
-        <div class = "marginclass"></div>
-    <div>
-        <img class="icons" src="img/passicon.png"></img>
-        <input class="textinsertion" type="password" placeholder="Password" name="password" id="password">
+    <div id="contactinformation">
+            <div class="marginclass"></div>
+            <div class="marginclass"></div>
+            <div class="marginclass"></div>
+            <div class="underline"></div>
+            <div class="marginclass"></div>
+            <div class="textedwhite">Stanislav</div>
+            <div class="textedgray">tech. support</div>
+            <div class="marginclass"></div>
+            <div>
+                <img class="icons" src="resources/imgindex/message.png"></img>
+                <a class="textedgraybigger marginpx">e-mail</a>
+            </div>
+            <div class="marginclass"></div>
+            <div class="underline"></div>
+            <div class="marginclass"></div>
+            <div class="textedwhite">Andrey</div>
+            <div class="textedgray">co-founder</div>
+            <div class="marginclass"></div>
+            <div>
+                <img class="icons" src="resources/imgindex/message.png"></img>
+                <a class="textedgraybigger marginpx">e-mail</a>
+            </div>
+            <div class="marginclass"></div>
+            <div class="underline"></div>
+            <div class="marginclass"></div>
+            <div class="marginclass"></div>
+            <div class="textedgray">or write to us in social networks</div>
+            <div class="marginclass"></div>
+            <a class="opacitychange" href="http://t.me/SagSaj"><img class="iconsbig" src="resources/imgindex/telegram.png"></img></a>
+            <a class="opacitychange"> <img class="iconsbig" src="resources/imgindex/linkedin.png"></img></a>
+            <a class="opacitychange" href="https://www.facebook.com/groups/1952174028425040/"><img class="iconsbig" src="resources/imgindex/facebook.png"></img></a>
+            <div class="underline"></div>
     </div>
-        <div class="underline"></div>
-        <div class="marginclass"></div>
-    
-    <div>
-        <img class="icons" src="img/passconficon.png"></img>
-        <input class="textinsertion" placeholder="Confirm password" type="password" id="password2">
-    </div>
-        <div class="underline"></div>
-        <div class="marginclass"></div>
-        <div class="marginclass"></div>
-        <div class="marginclass"></div>
-        <div class="centerblockindiv2">
-            <input class="submitclass" type="submit" value="Register" onclick="submitform()">
-        </div>
-    <input type="hidden" name="auth_method" value="password">
-    <!-- <input type="hidden" name="referal" value={{.Referal}}> -->
+
 </div>
-</form>
+<div id="divbutton3">
+    <div id="divbutton2"  onclick="clickbuttonres()">
+        <img id="buttonproduct" src="resources/imgindex/buttonup.png"></img>
+        <p id="textbuttonproduct" class="texted centered">PRODUCTS</p>
+    </div>
+
+    <div id="contactinformation2">
+        <div class="marginclass"></div>
+        <div class="marginclass"></div>
+        <div class="marginclass"></div>
+        <a href="/dueler/" class= ""><div class="opacitychange"><img class="iconsbig2" src="resources/imgindex/dueler.png"></img></div></a>
+        <div class="marginclass"></div>
+        <div class="marginclass"></div>
+        <div class="marginclass"></div>
+        <a href="/" class="opacitychange"><img class="iconsbig2" src="resources/imgindex/logoname.png"></img></a>
+    </div>
+
+</div>
+<div class="logo"></div>
+<img class="comingsoon" src="resources/imgindex/comingsoon.png"></img>
+<div id="logoname">
+<img id="logonamepic" src="resources/imgindex/logoname.png"></img>
+<div class="marginclass"></div>
+<div class="marginclass"></div>
+<a class="greytextrightalign">The world's first ingame betting platform based on AI.</a>
+<div></div>
+<a class="greytextrightalign">You can choose an opponent and bet during your</a>
+<div></div>
+<a class="greytextrightalign">favorite game using a convenient interface.</a>
+<div></div>
+<a class="greytextrightalign">And our AI will honestly determine</a>
+<div></div>
+<a class="greytextrightalign">the winter.</a>
 </div>
 </body>
+</html>

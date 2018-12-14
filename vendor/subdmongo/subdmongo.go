@@ -169,9 +169,14 @@ func RegistrNewPersonWithID(login, password string, ID int) (LoginInformation, e
 func FindPerson(login, password string) (LoginInformation, error) {
 	//initiateSession()
 	//defer session.Close()
+
 	session := GetMongoSession()
 	defer session.Close()
 	result0 := LoginInformation{}
+	if !CheckPersonExist(login) {
+		return result0, errors.New("not found")
+	}
+
 	c := session.DB(dBName).C("persons")
 	err = c.Find(bson.M{"login": login, "password": password}).One(&result0)
 	if err != nil {
@@ -199,6 +204,10 @@ func findPersonbyID(ID int) (LoginInformation, bool, error) {
 		return result0, false, err
 	}
 	return result0, true, nil
+}
+func CheckPersonExist(login string) bool {
+	_, oj, _ := findPerson(login)
+	return oj
 }
 func findPerson(login string) (LoginInformation, bool, error) {
 	//initiateSession()

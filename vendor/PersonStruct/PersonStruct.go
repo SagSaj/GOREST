@@ -68,7 +68,6 @@ func generateTocken(login string) string {
 	}
 	//log.Println(fmt.Sprint(hash(login)))
 	//учше
-	log.Println(s)
 	return s + fmt.Sprint(hash(login))
 }
 func InsertPerson(login, password string) (Person, error) {
@@ -122,11 +121,9 @@ func FindPersonByLogin(login, password string) (Person, error) {
 		log.Print(err.Error())
 		return p, err
 	}
-	log.Println("Finded search")
 	p.Login = login
 	p.Password = password
 	p.Balance = l.Balance
-	log.Println(fmt.Sprintf("%f - ", p.Balance))
 	p.WinCount = l.WinCount
 	p.AccountID = l.IDAccount
 	p.LoseCount = l.LoseCount

@@ -113,7 +113,7 @@ func HandleFunctionRegistration(w http.ResponseWriter, r *http.Request) {
 						http.Error(w, err.Error(), 401)
 					} else {
 						subdmongo.CheckReference(m.Login, m.Referal)
-						subdmongo.AddReferencePoint(m.Login, true)
+						//subdmongo.AddReferencePoint(m.Login, true)
 						w.Write(b)
 					}
 				} else {
@@ -149,6 +149,7 @@ func HandleFunctionRegistration(w http.ResponseWriter, r *http.Request) {
 		homepageTpl = template.Must(template.New("index.html").ParseFiles(homepageHTML))
 		id := strings.TrimPrefix(r.URL.Path, "/account/register/")
 		push(w, "/resources/style.css")
+		push(w, "/resources/img")
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		fullData := map[string]interface{}{
 			"Referal": id,
@@ -1047,7 +1048,7 @@ func GoServerListen() {
 	INI_ID = 0
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = ":" + serverString
+		port = "localhost:" + serverString
 	} else {
 		port = ":" + port
 	}
@@ -1070,8 +1071,6 @@ func GoServerListen() {
 	http.HandleFunc("/arena/quit/", HandleFunctionArenaQuit)
 	http.HandleFunc("/arena/result/", HandleFunctionArenaResult)
 	//fs
-	fs := http.FileServer(http.Dir("./resources"))
-	http.Handle("/resources/", http.StripPrefix("/resources/", fs))
 	log.Println("Started")
 	if err := http.ListenAndServe(port, nil); err != nil {
 		log.Fatal(err)

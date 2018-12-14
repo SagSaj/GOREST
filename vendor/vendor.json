@@ -18,7 +18,7 @@
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "3wklUeuizhDV/TZ6Xb/Jbab6Ry8=",
+			"checksumSHA1": "F+NSbTsdPNsUQ0wTgpf77nS6jn0=",
 			"path": "RESTSITE",
 			"revision": ""
 		},
@@ -58,10 +58,10 @@
 			"revisionTime": "2018-07-05T11:36:04Z"
 		},
 		{
-			"checksumSHA1": "+6C921Uhgkf4pxNoUXBR+4YgVGI=",
+			"checksumSHA1": "m2/Oh9cYBNvDqTg8ry2wEMy+uiw=",
 			"path": "mainrest",
-			"revision": "31800ff14e5ec975160ab7797af1d32dbd34fa3d",
-			"revisionTime": "2018-12-13T15:20:35Z"
+			"revision": "42e8fe017fd3b4b5eed23510c7beca843cb28b03",
+			"revisionTime": "2018-12-14T16:55:28Z"
 		},
 		{
 			"checksumSHA1": "fX8/IxFljF/M2WYldfhDJBpsC1Y=",

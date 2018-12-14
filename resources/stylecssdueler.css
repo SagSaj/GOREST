@@ -15,3 +15,10 @@ body {
     width: auto !important;
     min-height: 500px;
    }
+.comingsoon{
+    position: absolute;
+    width: 30%;
+    bottom: 10%;
+    left: 35%;
+    margin: auto;
+}

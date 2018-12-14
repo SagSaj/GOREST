@@ -439,6 +439,25 @@ func HandleFunctionIndex(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 }
+func HandleFunctionDueler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		homepageHTML := "dueler.html"
+		//log.Println(r.URL)
+		//	name := path.Base(homepageHTML)
+		//	log.Println(name)
+		homepageTpl = template.Must(template.New("dueler.html").ParseFiles(homepageHTML))
+
+		//	push(w, "/resources/style.css")
+		//	push(w, "/resources/img/background.png")
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		fullData := map[string]interface{}{
+			"Host": r.Host,
+		}
+		render(w, r, homepageTpl, "dueler.html", fullData)
+	} else {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+	}
+}
 
 //Done
 func GoServerListen() {
@@ -459,6 +478,7 @@ func GoServerListen() {
 	//	http.HandleFunc("/account/login/", HandleFunctionLogin)
 	http.HandleFunc("/account/register/", HandleFunctionRegistration)
 	http.HandleFunc("/", HandleFunctionIndex)
+	http.HandleFunc("/dueler/", HandleFunctionDueler)
 	////account/register/
 	//http.HandleFunc("/gethashmod/", HandleFunctionGetHashMod)
 	//fs

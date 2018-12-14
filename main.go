@@ -2,20 +2,19 @@ package main
 
 import (
 	re "REST"
+	res "RESTSITE"
 	"fmt"
 	"os"
 )
 
 //export
-const (
-	port = ":50051"
-)
 
 //var s mongo.SessionGame
 func main() {
 	//mongo.InitiateSession()
 	port := os.Getenv("PORT")
 	go re.GoServerListen(port)
+	go res.GoServerListen(port)
 	var guessColor string
 	for {
 		if _, err := fmt.Scanf("%s", &guessColor); err != nil {

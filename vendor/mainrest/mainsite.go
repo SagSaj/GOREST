@@ -7,10 +7,6 @@ import (
 )
 
 //export
-const (
-	port = ":50051"
-)
-
 //var s mongo.SessionGame
 func main() {
 	//mongo.InitiateSession()

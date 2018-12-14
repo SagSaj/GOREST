@@ -1052,12 +1052,12 @@ func GoServerListen(port string) {
 	http.HandleFunc("/currentVersion/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, par.CurrentVersion)
 	}) //tested
-	http.HandleFunc("/StatsAllPersons/", HandleFunctionStatAllPerson)       //tested
-	http.HandleFunc("/StatsActivePersons/", HandleFunctionStatActivePerson) //tested
-	http.HandleFunc("/StatAllBets/", HandleFunctionStatAllBets)             //tested
-	http.HandleFunc("/wotmod/", HandleFunctionGetMod)
+	//http.HandleFunc("/StatsAllPersons/", HandleFunctionStatAllPerson)       //tested
+	//http.HandleFunc("/StatsActivePersons/", HandleFunctionStatActivePerson) //tested
+	//http.HandleFunc("/StatAllBets/", HandleFunctionStatAllBets)             //tested
+	//http.HandleFunc("/wotmod/", HandleFunctionGetMod)
 	http.HandleFunc("/account/login/", HandleFunctionLogin)
-	http.HandleFunc("/account/register/", HandleFunctionRegistration)
+	//http.HandleFunc("/account/register/", HandleFunctionRegistration)
 	////account/register/
 	http.HandleFunc("/balance/", HandleFunctionBalance)
 	//

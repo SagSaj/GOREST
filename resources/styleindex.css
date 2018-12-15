@@ -45,6 +45,7 @@ body {
     position: relative;
     width: 140px;
     height: 40px;
+    cursor: pointer; 
 }
 .centered {
   position: absolute;

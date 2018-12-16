@@ -442,6 +442,7 @@ func HandleFunctionGetHashMod(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func HandleFunctionIndex(w http.ResponseWriter, r *http.Request) {
+	log.Println(r.RequestURI)
 	if r.Method == "GET" {
 		homepageHTML := "index.html"
 		//log.Println(r.URL)
@@ -480,8 +481,10 @@ func HandleFunctionDueler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func faviconHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "resource/favicon.ico")
+	log.Println(";j;j")
+	http.ServeFile(w, r, "/resources/favicon.ico")
 }
+
 //Done
 func GoServerListen(port string) {
 	/*GET /currentVersion

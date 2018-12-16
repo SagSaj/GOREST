@@ -442,7 +442,7 @@ func HandleFunctionGetHashMod(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func HandleFunctionIndex(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.RequestURI)
+	//log.Println(r.RequestURI)
 	if r.Method == "GET" {
 		homepageHTML := "index.html"
 		//log.Println(r.URL)
@@ -486,7 +486,7 @@ func faviconHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //Done
-func GoServerListen(port string) {
+func GoServerListen(port string,tls bool) {
 	/*GET /currentVersion
 	Параметры от клиента: нет
 	Ответ сервера: строка вида v.1.0.0 */
@@ -512,8 +512,14 @@ func GoServerListen(port string) {
 	http.Handle("/account/register/resources/", http.StripPrefix("/account/register/resources/", fs))
 	http.Handle("/resources/", http.StripPrefix("/resources/", fs))
 	log.Println("Started")
-	if err := http.ListenAndServe(port, nil); err != nil {
+	if tls {
+		if err := http.ListenAndServeTLS(port,"server.crt","server.key", nil); err != nil {
 		log.Fatal(err)
 	}
+	}else{
+		if err := http.ListenAndServe(port, nil); err != nil {
+			log.Fatal(err)
+	}
+}
 
 }

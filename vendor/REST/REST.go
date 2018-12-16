@@ -221,12 +221,7 @@ func HandleFunctionLogin(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), 400)
 			return
 		}
-
-		//res2B, _ := json.Marshal(m)
-		//LogString(string(res2B), "Login")
-		//LogString(m.AuthMethod, "Login")
 		if m.AuthMethod == "token" {
-			//	var p PersonStruct.Person
 			p, ok := PersonStruct.FindPersonByToken(m.Token)
 
 			if !ok {
@@ -1042,7 +1037,7 @@ func HandleFunctionGetHashMod(w http.ResponseWriter, r *http.Request) {
 }
 
 //Done
-func GoServerListen(port string) {
+func GoServerListen(port string, tls bool) {
 	/*GET /currentVersion
 	Параметры от клиента: нет
 	Ответ сервера: строка вида v.1.0.0 */
@@ -1072,8 +1067,14 @@ func GoServerListen(port string) {
 	http.HandleFunc("/arena/result/", HandleFunctionArenaResult)
 	//fs
 	log.Println("Started")
-	if err := http.ListenAndServe(port, nil); err != nil {
-		log.Fatal(err)
+	if tls {
+		if err := http.ListenAndServeTLS(port, "server.crt", "server.key", nil); err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		if err := http.ListenAndServe(port, nil); err != nil {
+			log.Fatal(err)
+		}
 	}
 
 }

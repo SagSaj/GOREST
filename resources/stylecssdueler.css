@@ -151,6 +151,8 @@ body {
 }
 #contactinformation2{
     visibility: hidden;
+    text-align: center;
+    margin-left: -128px;
 }
 .icons{
     border: 0;
@@ -164,7 +166,11 @@ body {
 }
 .iconsbig2{
     border: 0;
-    width: 140px;
+    height: 32px;
+}
+.iconsbig3{
+    border: 0;
+    height: 18px;
 }
 .marginpx{
     margin-left: 2px;
@@ -205,8 +211,8 @@ body {
     position: absolute;
     border: 0px;
     top:6%;
-    width: 20%;
-    left:35%;
+    width: 16%;
+    left:42%;
     margin: auto;
 }
 .opacitychange{

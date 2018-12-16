@@ -13,7 +13,7 @@ import (
 func main() {
 	//mongo.InitiateSession()
 	port := os.Getenv("PORT")
-	tlsos := os.Getenv("PORT")
+	tlsos := os.Getenv("TLSUSE")
 	tls := false
 	if tlsos != "" {
 		tls = true

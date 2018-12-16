@@ -6,87 +6,42 @@
     <link rel="stylesheet" href="../resources/stylecssdueler.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript">
-    function clickbuttoncontuniversal(srt) {
-
-            var el2 = srt.getElementsByClassName("texted")[0];
-            var el=srt.getElementsByClassName("button2")[0];
-            if (el.value == "2") {
+    function clickbuttoncont() {
+            var el = document.getElementById("buttoncontact");
+            var el2 = document.getElementById("textbuttoncontact");
+            var el3 = document.getElementById("contactinformation")
+            var el4 = document.getElementById("divbutton3").getElementsByTagName("div")[0];
+            var el5 = document.getElementById("contactinformation2")
+            if (el5.style.visibility == "visible")
+                el4.click();
+            if (el3.style.visibility != "visible") {
                 el.src = "../resources/imgindex/buttondown.png";
-                el.value="1"
                 el2.style.color = "black"
+                el3.style.visibility = "visible";
             } else {
-                el.value = "2"
                 el.src = "../resources/imgindex/buttonup.png";
                 el2.style.color = "white"
+                el3.style.visibility = "hidden";
             }
         }
-        function clickbuttoncont() {
-                var el = document.getElementById("buttoncontact");
-                var el2 = document.getElementById("textbuttoncontact");
-                var el3 = document.getElementById("contactinformation");
-                var el4 = document.getElementById("divbutton3");
-                var el5 = document.getElementById("divbutton4");
-                var el6 = document.getElementById("divbutton5");
-                var el7 = document.getElementById("divbutton6");
-                var elt = document.getElementById("divbutton1");
-                if (el3.style.visibility != "visible") {
-                    el.src = "../resources/imgindex/buttondown.png";
-                    elt.value = "2";
-                    el2.style.color = "black"
-                    el3.style.visibility = "visible";
-                    if (el4.value == "2") {
-                        el4.click()
-                    } 
-                    el5.style.visibility = "hidden"
-                    el6.style.visibility = "hidden"
-                    el4.style.visibility = "hidden"
-                    el7.style.visibility = "hidden"
-
-                } else {
-                    el.src = "../resources/imgindex/buttonup.png";
-                    elt.value ="1";
-                    el2.style.color = "white"
-                    el3.style.visibility = "hidden";
-                    
-                    if (el4.value == "2") {
-                        el4.click()
-                    } 
-                    el5.style.visibility = "visible"
-                    el6.style.visibility = "visible"
-                    el4.style.visibility = "visible"
-                    el7.style.visibility = "visible"
-
-                }
+        function clickbuttonres() {
+            var el = document.getElementById("buttonproduct");
+            var el2 = document.getElementById("textbuttonproduct");
+            var el3 = document.getElementById("contactinformation2")
+            var el4 = document.getElementById("divbutton1").getElementsByTagName("div")[0];
+            var el5 = document.getElementById("contactinformation")
+            if (el5.style.visibility == "visible")
+                el4.click();
+            if (el3.style.visibility != "visible") {
+                el.src = "../resources/imgindex/buttondown.png";
+                el2.style.color = "black"
+                el3.style.visibility = "visible";
+            } else {
+                el.src = "../resources/imgindex/buttonup.png";
+                el2.style.color = "white"
+                el3.style.visibility = "hidden";
             }
-            function clickbuttonres() {
-                var el = document.getElementById("buttonproduct");
-                var elt = document.getElementById("divbutton3");
-                var el2 = document.getElementById("textbuttonproduct");
-                var el3 = document.getElementById("contactinformation2")
-                var el4 = document.getElementById("divbutton1")
-                var el5 = document.getElementById("divbutton4");
-                var el6 = document.getElementById("divbutton5");
-                var el7 = document.getElementById("divbutton6");
-                if (el3.style.visibility != "visible") {
-                    el.src = "../resources/imgindex/buttondown.png";
-                    elt.value="2";
-                    el2.style.color = "black"
-                    el3.style.visibility = "visible";
-                        el5.style.top = "33%"
-                        el6.style.top = "43%"
-                        el7.style.top = "53%"
-                    
-                    
-                } else {
-                    el.src = "../resources/imgindex/buttonup.png";
-                    el2.style.color = "white"
-                    elt.value="1";
-                    el3.style.visibility = "hidden";
-                        el5.style.top = "23%"
-                        el6.style.top = "33%"
-                        el7.style.top = "43%"
-                }
-            }
+        }
     </script>
 </head>
 
@@ -154,7 +109,7 @@
     </div>
 <div id="divbutton4">
     <a href = "../account/register/">
-    <div id="divbutton2">
+    <div id="divbutton2100">
         <img id="buttoncontact" src="../resources/imgindex/buttonup.png"></img>
         <p id="textbuttonregister" class="texted centered">REGISTER</p>
     </div>
@@ -162,41 +117,39 @@
 </div>
 <div id="divbutton5">
     <a href="../account/register/">
-        <div id="divbutton2">
-            <img id="buttoncontact" src="../resources/imgindex/buttonup.png"></img>
+        <div id="divbutton2100">
             <p id="textbuttonforum" class="texted centered">FORUM</p>
         </div>
     </a>
 </div>
 <div id="divbutton6">
     <a href="https://www.youtube.com/watch?v=LiGERMtDGW8" target="_blank">
-        <div id="divbutton2">
-            <img id="buttoncontact" src="../resources/imgindex/buttonup.png"></img>
+        <div id="divbutton2100">
             <p id="textbuttonhowitworks" class="texted centered">HOWITWORKS</p>
         </div>
     </a>
 </div>
+<img id="logonamepic" src="../resources/imgindex/dueler.png"></img>
 <div id="logoname">
-    <img id="logonamepic" src="../resources/imgindex/dueler.png"></img>
     <div style="text-align: center;">
-    <div class="marginclass"></div>
-    <a class="greytextrightalign">LiderBoard</a>
-    <div class="underline"></div>
-    <a class="greytextrightalign">1</a>
-    <div class="underline"></div>
-    <a class="greytextrightalign">2</a>
-    <div class="underline"></div>
-    <a class="greytextrightalign">3</a>
-    <div class="underline"></div>
-    <a class="greytextrightalign">4</a>
-    <div class="underline"></div>
-    <a class="greytextrightalign">5</a>
-    <div class="underline"></div>
+    <img style="width: 100%;" src="../resources/imgdueler/liderboard.jpg"></img>
         </div>
     </div>
-    <div class="comingsoon"><a class="texted" style="font-size: 6em;">Images of prizes</a></div>
 </div>
-
+<div class="comingsoon">
+    <div id="leftborderprize">
+        <img id="leftimgprize" src="../resources/imgdueler/prizes/2.jpg"></img>
+        <p id="textleftprize">II</p>
+    </div>
+    <div id="centerborderprize">
+        <img id="centerimgprize" src="../resources/imgdueler/prizes/1.jpg"></img>
+        <p id="textcenterprize">I</p>
+    </div>
+    <div id="rightborderprize">
+        <img id="rightimgprize" src="../resources/imgdueler/prizes/3.jpg"></img>
+        <p id="textrightprize">III</p>
+    </div>
+</div>
 
 </body>
 

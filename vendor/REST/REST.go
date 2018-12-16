@@ -22,7 +22,7 @@ import (
 
 var serverString = "8000" //5050
 func LogString(s string, funct string) {
-	//log.Println("Inf " + funct + ":" + s)
+	log.Println("Inf " + funct + ":" + s)
 }
 
 type MessageError struct {
@@ -210,6 +210,7 @@ func HandleFunctionLogin(w http.ResponseWriter, r *http.Request) {
 		Status  string  `json:"status"`
 	}
 	var m Message
+	//LogString(r.RequestURI, "Login")
 	if r.Method == "POST" {
 		if r.Body == nil {
 			http.Error(w, "Please send a request body", 400)
@@ -220,8 +221,10 @@ func HandleFunctionLogin(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), 400)
 			return
 		}
+
 		//res2B, _ := json.Marshal(m)
 		//LogString(string(res2B), "Login")
+		//LogString(m.AuthMethod, "Login")
 		if m.AuthMethod == "token" {
 			//	var p PersonStruct.Person
 			p, ok := PersonStruct.FindPersonByToken(m.Token)

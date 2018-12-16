@@ -479,7 +479,9 @@ func HandleFunctionDueler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 }
-
+func faviconHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "resource/favicon.ico")
+}
 //Done
 func GoServerListen(port string) {
 	/*GET /currentVersion
@@ -497,6 +499,9 @@ func GoServerListen(port string) {
 	http.HandleFunc("/account/register/", HandleFunctionRegistration)
 	http.HandleFunc("/", HandleFunctionIndex)
 	http.HandleFunc("/dueler/", HandleFunctionDueler)
+	http.HandleFunc("/dueler/favicon.ico", faviconHandler)
+	http.HandleFunc("/account/register/favicon.ico", faviconHandler)
+	http.HandleFunc("/favicon.ico", faviconHandler)
 	////account/register/
 	//http.HandleFunc("/gethashmod/", HandleFunctionGetHashMod)
 	//fs

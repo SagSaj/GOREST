@@ -13,9 +13,9 @@ import (
 func main() {
 	//mongo.InitiateSession()
 	port := os.Getenv("PORT")
-	port1 := "localhost:7000"
+	//port1 := "localhost:7000"
 	go re.GoServerListen(port)
-	go res.GoServerListen(port1)
+	go res.GoServerListen(port)
 	var guessColor string
 	for {
 		if _, err := fmt.Scanf("%s", &guessColor); err != nil {

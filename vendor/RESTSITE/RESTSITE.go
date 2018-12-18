@@ -3,16 +3,26 @@ package RESTSITE
 import (
 	"PersonStruct"
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
 	ios "io/ioutil"
 	"log"
+	"logschan"
 	"net/http"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
 	"subdmongo"
+	"time"
+)
+
+type key int
+
+const (
+	requestIDKey key = 0
 )
 
 var serverString = "7000" //5050
@@ -229,6 +239,9 @@ func HandleFunctionLogin(w http.ResponseWriter, r *http.Request) {
 		Status  string  `json:"status"`
 	}
 	var m Message
+	//log.Println("restsite")
+	//log.Println(r.RequestURI)
+	//log.Println(r.Host)
 	if r.Method == "POST" {
 		if r.Body == nil {
 			http.Error(w, "Please send a request body", 400)
@@ -443,6 +456,8 @@ func HandleFunctionGetHashMod(w http.ResponseWriter, r *http.Request) {
 }
 func HandleFunctionIndex(w http.ResponseWriter, r *http.Request) {
 	//log.Println(r.RequestURI)
+	//log.Println(r.RequestURI)
+	//log.Println(r.Host)
 	if r.Method == "GET" {
 		homepageHTML := "index.html"
 		//log.Println(r.URL)
@@ -458,6 +473,7 @@ func HandleFunctionIndex(w http.ResponseWriter, r *http.Request) {
 		}
 		render(w, r, homepageTpl, "index.html", fullData)
 	} else {
+
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 }
@@ -484,42 +500,83 @@ func faviconHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println(";j;j")
 	http.ServeFile(w, r, "/resources/favicon.ico")
 }
+func tracing(nextRequestID func() string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			requestID := r.Header.Get("X-Request-Id")
+			if requestID == "" {
+				requestID = nextRequestID()
+			}
+			ctx := context.WithValue(r.Context(), requestIDKey, requestID)
+			w.Header().Set("X-Request-Id", requestID)
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	}
+}
+
+var Myloger = logschan.Log{}
+
+func logging(logger *log.Logger) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			defer func() {
+				requestID, ok := r.Context().Value(requestIDKey).(string)
+				if !ok {
+					requestID = "unknown"
+				}
+				Myloger.AddLog(requestID, r.Method, r.URL.Path, r.RemoteAddr, r.UserAgent())
+			}()
+			next.ServeHTTP(w, r)
+		})
+	}
+}
 
 //Done
-func GoServerListen(port string,tls bool) {
+func GoServerListen(port string, tls bool) {
 	/*GET /currentVersion
 	Параметры от клиента: нет
 	Ответ сервера: строка вида v.1.0.0 */
 	//mapSit = make(map[string]MessageoutSit, 2)
+	logger := log.New(os.Stdout, "http: ", log.LstdFlags)
 	if port == "" {
 		port = ":" + serverString
 	}
 	//http.HandleFunc("/StatsAllPersons/", HandleFunctionStatAllPerson)       //tested
 	//http.HandleFunc("/StatsActivePersons/", HandleFunctionStatActivePerson) //tested
 	//http.HandleFunc("/StatAllBets/", HandleFunctionStatAllBets)             //tested
-	http.HandleFunc("/wotmod/", HandleFunctionGetMod)
+	router := http.NewServeMux()
+	nextRequestID := func() string {
+		return fmt.Sprintf("%d", time.Now().UnixNano())
+	}
+
+	server := &http.Server{
+		Addr:         port,
+		Handler:      tracing(nextRequestID)(logging(logger)(router)),
+		ErrorLog:     logger,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  15 * time.Second,
+	}
+	router.Handle("/wotmod/", http.HandlerFunc(HandleFunctionGetMod))
 	//	http.HandleFunc("/account/login/", HandleFunctionLogin)
-	http.HandleFunc("/account/register/", HandleFunctionRegistration)
-	http.HandleFunc("/", HandleFunctionIndex)
-	http.HandleFunc("/dueler/", HandleFunctionDueler)
-	http.HandleFunc("/dueler/favicon.ico", faviconHandler)
-	http.HandleFunc("/account/register/favicon.ico", faviconHandler)
-	http.HandleFunc("/favicon.ico", faviconHandler)
+	router.Handle("/account/register/", http.HandlerFunc(HandleFunctionRegistration))
+	router.Handle("/", http.HandlerFunc(HandleFunctionIndex))
+	router.Handle("/dueler/", http.HandlerFunc(HandleFunctionDueler))
 	////account/register/
 	//http.HandleFunc("/gethashmod/", HandleFunctionGetHashMod)
 	//fs
 	fs := http.FileServer(http.Dir("resources"))
-	http.Handle("/account/register/resources/", http.StripPrefix("/account/register/resources/", fs))
-	http.Handle("/resources/", http.StripPrefix("/resources/", fs))
+	router.Handle("/account/register/resources/", http.StripPrefix("/account/register/resources/", fs))
+	router.Handle("/resources/", http.StripPrefix("/resources/", fs))
 	log.Println("Started")
 	if tls {
-		if err := http.ListenAndServeTLS(port,"server.crt","server.key", nil); err != nil {
-		log.Fatal(err)
-	}
-	}else{
-		if err := http.ListenAndServe(port, nil); err != nil {
+		if err := server.ListenAndServeTLS("server.crt", "server.key"); err != nil {
 			log.Fatal(err)
+		}
+	} else {
+		if err := server.ListenAndServe(); err != nil {
+			log.Fatal(err)
+		}
 	}
-}
 
 }

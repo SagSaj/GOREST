@@ -2,7 +2,7 @@ package main
 
 import (
 	re "REST"
-	res "RESTSITE"
+//	res "RESTSITE"
 	"fmt"
 	"os"
 )
@@ -18,9 +18,10 @@ func main() {
 	if tlsos != "" {
 		tls = true
 	}
-	//port1 := "localhost:7000"
+	port = ":8000"
+	//port1 := ":7000"
 	go re.GoServerListen(port, tls)
-	go res.GoServerListen(port, tls)
+	//go res.GoServerListen(port1, tls)
 	var guessColor string
 	for {
 		if _, err := fmt.Scanf("%s", &guessColor); err != nil {

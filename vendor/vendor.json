@@ -13,12 +13,12 @@
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "FVBWz11Y9VUTrmi6jvfx0V/f66I=",
+			"checksumSHA1": "l93B0VZTrM+hJ/kdbx+Y3IMpTac=",
 			"path": "REST",
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "Cf5lLuQpXQ7HAlkz5Z49nJMHfGY=",
+			"checksumSHA1": "u5D56LcJFVK86auOxuM54pJOTnE=",
 			"path": "RESTSITE",
 			"revision": ""
 		},
@@ -56,6 +56,11 @@
 			"path": "gopkg.in/mgo.v2/internal/scram",
 			"revision": "9856a29383ce1c59f308dd1cf0363a79b5bef6b5",
 			"revisionTime": "2018-07-05T11:36:04Z"
+		},
+		{
+			"checksumSHA1": "B5jwv7FNaOIgv9tMjokQI5Afey4=",
+			"path": "logschan",
+			"revision": ""
 		},
 		{
 			"checksumSHA1": "fX8/IxFljF/M2WYldfhDJBpsC1Y=",

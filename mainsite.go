@@ -11,7 +11,13 @@ import (
 func main() {
 	//mongo.InitiateSession()
 	port := os.Getenv("PORT")
-	go re.GoServerListen(port)
+	tlsos := os.Getenv("TLSUSE")
+	tls := false
+	if tlsos != "" {
+		tls = true
+	}
+	port = ":7000"
+	go re.GoServerListen(port, tls)
 	var guessColor string
 	for {
 		if _, err := fmt.Scanf("%s", &guessColor); err != nil {

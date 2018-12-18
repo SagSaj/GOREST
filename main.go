@@ -3,7 +3,7 @@ package main
 import (
 	re "REST"
 	//	res "RESTSITE"
-	"fmt"
+	//"fmt"
 	"os"
 )
 
@@ -15,26 +15,28 @@ func main() {
 	port := os.Getenv("PORT")
 	tlsos := os.Getenv("TLSUSE")
 	tls := false
+	var ch chan bool
 	if tlsos != "" {
 		tls = true
 	}
 	port = ":8000"
 	//port1 := ":7000"
 	go re.GoServerListen(port, tls)
+	<-ch
 	//go res.GoServerListen(port1, tls)
-	var guessColor string
-	for {
-		if _, err := fmt.Scanf("%s", &guessColor); err != nil {
-			fmt.Printf("%s\n", err)
-			return
-		}
-		if "exit" == guessColor {
-			os.Exit(0)
-			return
-		}
-		if "drop" == guessColor {
-			re.DropBase()
-			return
-		}
-	}
+	// var guessColor string
+	// for {
+	// 	if _, err := fmt.Scanf("%s", &guessColor); err != nil {
+	// 		fmt.Printf("%s\n", err)
+	// 		return
+	// 	}
+	// 	if "exit" == guessColor {
+	// 		os.Exit(0)
+	// 		return
+	// 	}
+	// 	if "drop" == guessColor {
+	// 		re.DropBase()
+	// 		return
+	// 	}
+	// }
 }

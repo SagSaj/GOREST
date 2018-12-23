@@ -36,7 +36,7 @@
                    
                     if(json["error"]==undefined){
                     if (json["status"] == "ok") {
-                        document.getElementById('download').click();
+                        //document.getElementById('download').click();
                         document.getElementById("buttonsubmit").style.visibility = "hidden";
                         document.getElementById("form1").style.visibility = "hidden";
                         document.getElementById("message").style.visibility = "visible";
@@ -51,7 +51,19 @@
 </script>
  </head>
  <body>
+    <div id="divbutton4">
+        <a href="{{.Host}}/wotmod/Dueler.zip" download="Dueler.zip" target="_blank" id="download2">
+            <div id="divbutton2100">
+                <img id="buttoncontact" src="../../resources/imgindex/buttonup.png"></img>
+                <p id="textbuttonregister" class="texted centered">DOWNLOAD</p>
+            </div>
+        </a>
+    </div>
 <div class = "centerblock">
+    <div id="divbuttonback">
+        <a href="../../dueler/">
+    <img id="backbutton" src="./resources/img/back.png"></img>
+</a></div>
 <div class="logo"></div>
 <div class = "centerblockindiv">
     <div class="marginclass"></div>

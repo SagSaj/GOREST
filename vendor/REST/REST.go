@@ -4,10 +4,13 @@ import (
 	par "Params"
 	"PersonStruct"
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
 	ios "io/ioutil"
+	"logschan"
+	"os"
 
 	"log"
 	mem "memcash"
@@ -18,6 +21,12 @@ import (
 	"strings"
 	"subdmongo"
 	"time"
+)
+
+type key int
+
+const (
+	requestIDKey key = 0
 )
 
 var serverString = "8000" //5050
@@ -85,11 +94,11 @@ func HandleFunctionRegistration(w http.ResponseWriter, r *http.Request) {
 		//LogString(string(res2B), "registration")
 		if m.AuthMethod == "password" {
 			//	var p PersonStruct.Person
-			p, err := PersonStruct.FindPersonByLogin(strings.ToLower(m.Login), m.Password)
+			p, err := PersonStruct.FindPersonByLogin(m.Login, m.Password)
 			if err != nil {
 				if err.Error() == "not found" {
 
-					p, err = PersonStruct.InsertPersonWithID(strings.ToLower(m.Login), m.Password, m.AccountID)
+					p, err = PersonStruct.InsertPersonWithID(m.Login, m.Password, m.AccountID)
 					if err != nil {
 						mo := MessageError{Error: "LOGIN_EXIST"}
 						b, err := json.Marshal(mo)
@@ -111,7 +120,7 @@ func HandleFunctionRegistration(w http.ResponseWriter, r *http.Request) {
 					if err != nil {
 						http.Error(w, err.Error(), 401)
 					} else {
-						subdmongo.CheckReference(strings.ToLower(m.Login), m.Referal)
+						subdmongo.CheckReference(m.Login, m.Referal)
 						//subdmongo.AddReferencePoint(m.Login, true)
 						w.Write(b)
 					}
@@ -211,6 +220,7 @@ func HandleFunctionLogin(w http.ResponseWriter, r *http.Request) {
 	}
 	var m Message
 	//LogString(r.RequestURI, "Login")
+
 	if r.Method == "POST" {
 		if r.Body == nil {
 			http.Error(w, "Please send a request body", 400)
@@ -253,7 +263,7 @@ func HandleFunctionLogin(w http.ResponseWriter, r *http.Request) {
 		}
 		if m.AuthMethod == "password" {
 			//	var p PersonStruct.Person errors by found
-			p, err := PersonStruct.FindPersonByLogin(strings.ToLower(m.Login), m.Password)
+			p, err := PersonStruct.FindPersonByLogin(m.Login, m.Password)
 			if err != nil {
 				log.Println(err.Error())
 				if err.Error() == "not found" {
@@ -1035,6 +1045,36 @@ func HandleFunctionGetHashMod(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 }
+func tracing(nextRequestID func() string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			requestID := r.Header.Get("X-Request-Id")
+			if requestID == "" {
+				requestID = nextRequestID()
+			}
+			ctx := context.WithValue(r.Context(), requestIDKey, requestID)
+			w.Header().Set("X-Request-Id", requestID)
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	}
+}
+
+var Myloger = logschan.Log{}
+
+func logging(logger *log.Logger) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			defer func() {
+				requestID, ok := r.Context().Value(requestIDKey).(string)
+				if !ok {
+					requestID = "unknown"
+				}
+				Myloger.AddLog(requestID, r.Method, r.URL.Path, r.RemoteAddr, r.UserAgent())
+			}()
+			next.ServeHTTP(w, r)
+		})
+	}
+}
 
 //Done
 func GoServerListen(port string, tls bool) {
@@ -1042,37 +1082,52 @@ func GoServerListen(port string, tls bool) {
 	Параметры от клиента: нет
 	Ответ сервера: строка вида v.1.0.0 */
 	//mapSit = make(map[string]MessageoutSit, 2)
-	INI_ID = 0
-
+	logger := log.New(os.Stdout, "http: ", log.LstdFlags)
 	if port == "" {
 		port = ":" + serverString
 	}
-	http.HandleFunc("/currentVersion/", func(w http.ResponseWriter, r *http.Request) {
+	//http.HandleFunc("/StatsAllPersons/", HandleFunctionStatAllPerson)       //tested
+	//http.HandleFunc("/StatsActivePersons/", HandleFunctionStatActivePerson) //tested
+	//http.HandleFunc("/StatAllBets/", HandleFunctionStatAllBets)             //tested
+	router := http.NewServeMux()
+	nextRequestID := func() string {
+		return fmt.Sprintf("%d", time.Now().UnixNano())
+	}
+
+	server := &http.Server{
+		Addr:         port,
+		Handler:      tracing(nextRequestID)(logging(logger)(router)),
+		ErrorLog:     logger,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  15 * time.Second,
+	}
+	router.Handle("/currentVersion/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, par.CurrentVersion)
-	}) //tested
+	})) //tested
 	//http.HandleFunc("/StatsAllPersons/", HandleFunctionStatAllPerson)       //tested
 	//http.HandleFunc("/StatsActivePersons/", HandleFunctionStatActivePerson) //tested
 	//http.HandleFunc("/StatAllBets/", HandleFunctionStatAllBets)             //tested
 	//http.HandleFunc("/wotmod/", HandleFunctionGetMod)
-	http.HandleFunc("/account/login/", HandleFunctionLogin)
+	router.Handle("/account/login/", http.HandlerFunc(HandleFunctionLogin))
 	//http.HandleFunc("/account/register/", HandleFunctionRegistration)
 	////account/register/
-	http.HandleFunc("/balance/", HandleFunctionBalance)
+	router.Handle("/balance/", http.HandlerFunc(HandleFunctionBalance))
 	//
-	http.HandleFunc("/arena/enter/", HandleFunctionArenaEnter)
-	http.HandleFunc("/arena/situation/", HandleFunctionArenaSituation)
-	http.HandleFunc("/parry/", HandleFunctionParry)
-	http.HandleFunc("/gethashmod/", HandleFunctionGetHashMod)
-	http.HandleFunc("/arena/quit/", HandleFunctionArenaQuit)
-	http.HandleFunc("/arena/result/", HandleFunctionArenaResult)
+	router.Handle("/arena/enter/", http.HandlerFunc(HandleFunctionArenaEnter))
+	router.Handle("/arena/situation/", http.HandlerFunc(HandleFunctionArenaSituation))
+	router.Handle("/parry/", http.HandlerFunc(HandleFunctionParry))
+	router.Handle("/gethashmod/", http.HandlerFunc(HandleFunctionGetHashMod))
+	router.Handle("/arena/quit/", http.HandlerFunc(HandleFunctionArenaQuit))
+	router.Handle("/arena/result/", http.HandlerFunc(HandleFunctionArenaResult))
 	//fs
 	log.Println("Started")
 	if tls {
-		if err := http.ListenAndServeTLS(port, "server.crt", "server.key", nil); err != nil {
+		if err := server.ListenAndServeTLS("server.crt", "server.key"); err != nil {
 			log.Fatal(err)
 		}
 	} else {
-		if err := http.ListenAndServe(port, nil); err != nil {
+		if err := server.ListenAndServe(); err != nil {
 			log.Fatal(err)
 		}
 	}

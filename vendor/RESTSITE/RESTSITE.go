@@ -3,16 +3,26 @@ package RESTSITE
 import (
 	"PersonStruct"
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
 	ios "io/ioutil"
 	"log"
+	"logschan"
 	"net/http"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
 	"subdmongo"
+	"time"
+)
+
+type key int
+
+const (
+	requestIDKey key = 0
 )
 
 var serverString = "7000" //5050
@@ -82,7 +92,7 @@ func HandleFunctionRegistration(w http.ResponseWriter, r *http.Request) {
 		//LogString(string(res2B), "registration")
 		if m.AuthMethod == "password" {
 			//	var p PersonStruct.Person
-			if !re.MatchString(strings.ToLower(m.Login)) {
+			if !re.MatchString(m.Login) {
 				mo := MessageError{Error: "INVALID_EMAIL"}
 				b, err := json.Marshal(mo)
 				if err != nil {
@@ -102,11 +112,11 @@ func HandleFunctionRegistration(w http.ResponseWriter, r *http.Request) {
 				}
 				return
 			}
-			_, err := PersonStruct.FindPersonByLogin(strings.ToLower(m.Login), m.Password)
+			_, err := PersonStruct.FindPersonByLogin(m.Login, m.Password)
 			if err != nil {
 				if err.Error() == "not found" {
 
-					_, err = PersonStruct.InsertPerson(strings.ToLower(m.Login), m.Password)
+					_, err = PersonStruct.InsertPerson(m.Login, m.Password)
 					if err != nil {
 						mo := MessageError{Error: "LOGIN_EXIST"}
 						b, err := json.Marshal(mo)
@@ -128,7 +138,7 @@ func HandleFunctionRegistration(w http.ResponseWriter, r *http.Request) {
 					if err != nil {
 						http.Error(w, err.Error(), 401)
 					} else {
-						subdmongo.CheckReference(strings.ToLower(m.Login), m.Referal)
+						subdmongo.CheckReference(m.Login, m.Referal)
 						//subdmongo.AddReferencePoint(m.Login, true)
 						w.Write(b)
 					}
@@ -229,6 +239,9 @@ func HandleFunctionLogin(w http.ResponseWriter, r *http.Request) {
 		Status  string  `json:"status"`
 	}
 	var m Message
+	//log.Println("restsite")
+	//log.Println(r.RequestURI)
+	//log.Println(r.Host)
 	if r.Method == "POST" {
 		if r.Body == nil {
 			http.Error(w, "Please send a request body", 400)
@@ -274,7 +287,7 @@ func HandleFunctionLogin(w http.ResponseWriter, r *http.Request) {
 		}
 		if m.AuthMethod == "password" {
 			//	var p PersonStruct.Person errors by found
-			p, err := PersonStruct.FindPersonByLogin(strings.ToLower(m.Login), m.Password)
+			p, err := PersonStruct.FindPersonByLogin(m.Login, m.Password)
 			if err != nil {
 				log.Println(err.Error())
 				if err.Error() == "not found" {
@@ -443,6 +456,8 @@ func HandleFunctionGetHashMod(w http.ResponseWriter, r *http.Request) {
 }
 func HandleFunctionIndex(w http.ResponseWriter, r *http.Request) {
 	//log.Println(r.RequestURI)
+	//log.Println(r.RequestURI)
+	//log.Println(r.Host)
 	if r.Method == "GET" {
 		homepageHTML := "index.html"
 		//log.Println(r.URL)
@@ -458,6 +473,7 @@ func HandleFunctionIndex(w http.ResponseWriter, r *http.Request) {
 		}
 		render(w, r, homepageTpl, "index.html", fullData)
 	} else {
+
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 }
@@ -471,9 +487,29 @@ func HandleFunctionDueler(w http.ResponseWriter, r *http.Request) {
 
 		//	push(w, "/resources/style.css")
 		//	push(w, "/resources/img/background.png")
+
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		l := subdmongo.GetTop9Players()
 		fullData := map[string]interface{}{
-			"Host": r.Host,
+			"Host":         r.Host,
+			"Player1":      l[0].Login + "    " + fmt.Sprintf("%.0f", l[0].Balance) + "  Points",
+			"Player1Width": 300,
+			"Player2":      l[1].Login + "    " + fmt.Sprintf("%.0f", l[1].Balance) + "  Points",
+			"Player2Width": l[1].Balance / l[0].Balance * 300,
+			"Player3":      l[2].Login + "    " + fmt.Sprintf("%.0f", l[2].Balance) + "  Points",
+			"Player3Width": l[2].Balance / l[0].Balance * 300,
+			"Player4":      l[3].Login + "    " + fmt.Sprintf("%.0f", l[3].Balance) + "  Points",
+			"Player4Width": l[3].Balance / l[0].Balance * 300,
+			"Player5":      l[4].Login + "    " + fmt.Sprintf("%.0f", l[4].Balance) + "  Points",
+			"Player5Width": l[4].Balance / l[0].Balance * 300,
+			"Player6":      l[5].Login + "    " + fmt.Sprintf("%.0f", l[5].Balance) + "  Points",
+			"Player6Width": l[5].Balance / l[0].Balance * 300,
+			"Player7":      l[6].Login + "    " + fmt.Sprintf("%.0f", l[6].Balance) + "  Points",
+			"Player7Width": l[6].Balance / l[0].Balance * 300,
+			"Player8":      l[7].Login + "    " + fmt.Sprintf("%.0f", l[7].Balance) + "  Points",
+			"Player8Width": l[7].Balance / l[0].Balance * 300,
+			"Player9":      l[8].Login + "    " + fmt.Sprintf("%.0f", l[8].Balance) + "  Points",
+			"Player9Width": l[8].Balance / l[0].Balance * 300,
 		}
 		render(w, r, homepageTpl, "dueler.html", fullData)
 	} else {
@@ -481,45 +517,85 @@ func HandleFunctionDueler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func faviconHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(";j;j")
 	http.ServeFile(w, r, "/resources/favicon.ico")
+}
+func tracing(nextRequestID func() string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			requestID := r.Header.Get("X-Request-Id")
+			if requestID == "" {
+				requestID = nextRequestID()
+			}
+			ctx := context.WithValue(r.Context(), requestIDKey, requestID)
+			w.Header().Set("X-Request-Id", requestID)
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	}
+}
+
+var Myloger = logschan.Log{}
+
+func logging(logger *log.Logger) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			defer func() {
+				requestID, ok := r.Context().Value(requestIDKey).(string)
+				if !ok {
+					requestID = "unknown"
+				}
+				Myloger.AddLog(requestID, r.Method, r.URL.Path, r.RemoteAddr, r.UserAgent())
+			}()
+			next.ServeHTTP(w, r)
+		})
+	}
 }
 
 //Done
-func GoServerListen(port string,tls bool) {
+func GoServerListen(port string, tls bool) {
 	/*GET /currentVersion
 	Параметры от клиента: нет
 	Ответ сервера: строка вида v.1.0.0 */
 	//mapSit = make(map[string]MessageoutSit, 2)
+	logger := log.New(os.Stdout, "http: ", log.LstdFlags)
 	if port == "" {
 		port = ":" + serverString
 	}
 	//http.HandleFunc("/StatsAllPersons/", HandleFunctionStatAllPerson)       //tested
 	//http.HandleFunc("/StatsActivePersons/", HandleFunctionStatActivePerson) //tested
 	//http.HandleFunc("/StatAllBets/", HandleFunctionStatAllBets)             //tested
-	http.HandleFunc("/wotmod/", HandleFunctionGetMod)
+	router := http.NewServeMux()
+	nextRequestID := func() string {
+		return fmt.Sprintf("%d", time.Now().UnixNano())
+	}
+
+	server := &http.Server{
+		Addr:         port,
+		Handler:      tracing(nextRequestID)(logging(logger)(router)),
+		ErrorLog:     logger,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  15 * time.Second,
+	}
+	router.Handle("/wotmod/", http.HandlerFunc(HandleFunctionGetMod))
 	//	http.HandleFunc("/account/login/", HandleFunctionLogin)
-	http.HandleFunc("/account/register/", HandleFunctionRegistration)
-	http.HandleFunc("/", HandleFunctionIndex)
-	http.HandleFunc("/dueler/", HandleFunctionDueler)
-	http.HandleFunc("/dueler/favicon.ico", faviconHandler)
-	http.HandleFunc("/account/register/favicon.ico", faviconHandler)
-	http.HandleFunc("/favicon.ico", faviconHandler)
+	router.Handle("/account/register/", http.HandlerFunc(HandleFunctionRegistration))
+	router.Handle("/", http.HandlerFunc(HandleFunctionIndex))
+	router.Handle("/dueler/", http.HandlerFunc(HandleFunctionDueler))
 	////account/register/
 	//http.HandleFunc("/gethashmod/", HandleFunctionGetHashMod)
 	//fs
 	fs := http.FileServer(http.Dir("resources"))
-	http.Handle("/account/register/resources/", http.StripPrefix("/account/register/resources/", fs))
-	http.Handle("/resources/", http.StripPrefix("/resources/", fs))
+	router.Handle("/account/register/resources/", http.StripPrefix("/account/register/resources/", fs))
+	router.Handle("/resources/", http.StripPrefix("/resources/", fs))
 	log.Println("Started")
 	if tls {
-		if err := http.ListenAndServeTLS(port,"server.crt","server.key", nil); err != nil {
-		log.Fatal(err)
-	}
-	}else{
-		if err := http.ListenAndServe(port, nil); err != nil {
+		if err := server.ListenAndServeTLS("server.crt", "server.key"); err != nil {
 			log.Fatal(err)
+		}
+	} else {
+		if err := server.ListenAndServe(); err != nil {
+			log.Fatal(err)
+		}
 	}
-}
 
 }

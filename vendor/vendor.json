@@ -13,7 +13,7 @@
 			"revision": ""
 		},
 		{
-			"checksumSHA1": "l93B0VZTrM+hJ/kdbx+Y3IMpTac=",
+			"checksumSHA1": "IygEilmuXNJmar7IUMzw1DZe+yk=",
 			"path": "REST",
 			"revision": ""
 		},
@@ -83,5 +83,5 @@
 			"revision": ""
 		}
 	],
-	"rootPath": "mainREST"
+	"rootPath": "mainrest"
 }

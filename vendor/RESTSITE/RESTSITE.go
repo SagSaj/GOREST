@@ -367,7 +367,6 @@ func HandleFunctionGetMod(w http.ResponseWriter, r *http.Request) {
 func HandleFunctionStatAllPerson(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "GET" {
-
 		fmt.Fprintf(w, strconv.Itoa(subdmongo.GetAllPersons()))
 
 	} else {
@@ -585,6 +584,10 @@ func GoServerListen(port string, tls bool) {
 	//http.HandleFunc("/gethashmod/", HandleFunctionGetHashMod)
 	//fs
 	fs := http.FileServer(http.Dir("resources"))
+
+	router.Handle("/StatsAllPersons/", http.HandlerFunc(HandleFunctionStatAllPerson))       //tested
+	router.Handle("/StatsActivePersons/", http.HandlerFunc(HandleFunctionStatActivePerson)) //tested
+	router.Handle("/StatAllBets/", http.HandlerFunc(HandleFunctionStatAllBets))             //tested
 	router.Handle("/account/register/resources/", http.StripPrefix("/account/register/resources/", fs))
 	router.Handle("/resources/", http.StripPrefix("/resources/", fs))
 	log.Println("Started")

@@ -959,7 +959,7 @@ func HandleFunctionStatAllPerson(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method == "GET" {
 
-		log.Println("in")
+		
 		fmt.Fprintf(w, strconv.Itoa(subdmongo.GetAllPersons()))
 
 	} else {
@@ -989,7 +989,7 @@ func HandleFunctionStatAllBets(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-const HTTPserverpathGetMod = "/account/register/"
+const HTTPserverpathGetMod = "http://challenger.dueler.club/account/register/"
 
 func HandleFunctionGetHashMod(w http.ResponseWriter, r *http.Request) {
 
@@ -1028,7 +1028,7 @@ func HandleFunctionGetHashMod(w http.ResponseWriter, r *http.Request) {
 			log.Println(err.Error())
 			http.Error(w, err.Error(), 400)
 		}
-		stans := r.Host + HTTPserverpathGetMod + str
+		stans := HTTPserverpathGetMod + str
 		//
 		mo := Messageout{
 			Reference: stans,

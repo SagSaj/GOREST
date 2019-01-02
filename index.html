@@ -3,8 +3,8 @@
  <head>
   <meta charset="utf-8">
   <title>Challenger</title>
-<link rel="stylesheet" href="resources/styleindex.css">
-<link rel="icon" href="resources/favicon.ico">
+<link rel="stylesheet" href="/resources/styleindex.css">
+<link rel="icon" href="/resources/favicon.ico">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
     function clickbuttoncont(){
@@ -16,11 +16,11 @@
         if (el5.style.visibility == "visible")
             el4.click();
         if(el3.style.visibility  != "visible"){
-            el.src = "resources/imgindex/buttondown.png";
+            el.src = "/resources/imgindex/buttondown.png";
             el2.style.color = "black"
             el3.style.visibility = "visible";
         } else {
-            el.src = "resources/imgindex/buttonup.png";
+            el.src = "/resources/imgindex/buttonup.png";
             el2.style.color = "white"
             el3.style.visibility = "hidden";
         }
@@ -34,11 +34,11 @@
             if (el5.style.visibility == "visible")
                 el4.click();
             if (el3.style.visibility != "visible") {
-                el.src = "resources/imgindex/buttondown.png";
+                el.src = "/resources/imgindex/buttondown.png";
                 el2.style.color = "black"
                 el3.style.visibility = "visible";
             } else {
-                el.src = "resources/imgindex/buttonup.png";
+                el.src = "/resources/imgindex/buttonup.png";
                 el2.style.color = "white"
                 el3.style.visibility = "hidden";
             }
@@ -46,13 +46,14 @@
 </script>
  </head>
  <body>
+
     <div class="logo1">
         <div class="logo2"></div>
     </div>
 <div id="divbutton1">
     <div id="divbutton2" onclick="clickbuttoncont()">
-        <img id="buttoncontact" src="resources/imgindex/buttonup.png" ></img>
-        <p id="textbuttoncontact" class="texted centered">CONTACT US</p>
+        <img id="buttoncontact" src="/resources/imgindex/buttonup.png" ></img>
+        <a id="textbuttoncontact" class="texted centered">{{.CONTACTUS}}</a>
     </div>
     <div id="contactinformation">
             <div class="marginclass"></div>
@@ -60,40 +61,40 @@
             <div class="marginclass"></div>
             <div class="underline"></div>
             <div class="marginclass"></div>
-            <div class="textedwhite">Stanislav</div>
-            <div class="textedgray">tech. support</div>
+            <div class="textedwhite">{{.Stanislav}}</div>
+            <div class="textedgray">{{.Techsupport}}</div>
             <div class="marginclass"></div>
             <div>
-                <img class="icons" src="resources/imgindex/message.png"></img>
+                <img class="icons" src="/resources/imgindex/message.png"></img>
                 <a class="textedgraybigger marginpx">e-mail</a>
             </div>
             <div class="marginclass"></div>
             <div class="underline"></div>
             <div class="marginclass"></div>
-            <div class="textedwhite">Andrey</div>
-            <div class="textedgray">co-founder</div>
+            <div class="textedwhite">{{.Andrey}}</div>
+            <div class="textedgray">{{.cofounder}}</div>
             <div class="marginclass"></div>
             <div>
-                <img class="icons" src="resources/imgindex/message.png"></img>
+                <img class="icons" src="/resources/imgindex/message.png"></img>
                 <a class="textedgraybigger marginpx">e-mail</a>
             </div>
             <div class="marginclass"></div>
             <div class="underline"></div>
             <div class="marginclass"></div>
             <div class="marginclass"></div>
-            <div class="textedgray">or write to us in social networks</div>
+            <div class="textedgray">{{.networks}}</div>
             <div class="marginclass"></div>
-            <a class="opacitychange" href="http://t.me/SagSaj"><img class="iconsbig" src="resources/imgindex/telegram.png"></img></a>
-            <a class="opacitychange"> <img class="iconsbig" src="resources/imgindex/linkedin.png"></img></a>
-            <a class="opacitychange" href="https://www.facebook.com/groups/1952174028425040/"><img class="iconsbig" src="resources/imgindex/facebook.png"></img></a>
+            <a class="opacitychange" href="http://t.me/SagSaj"><img class="iconsbig" src="/resources/imgindex/telegram.png"></img></a>
+            <a class="opacitychange"> <img class="iconsbig" src="/resources/imgindex/linkedin.png"></img></a>
+            <a class="opacitychange" href="https://www.facebook.com/groups/1952174028425040/"><img class="iconsbig" src="/resources/imgindex/facebook.png"></img></a>
             <div class="underline"></div>
     </div>
 
 </div>
 <div id="divbutton3">
     <div id="divbutton2"  onclick="clickbuttonres()">
-        <img id="buttonproduct" src="resources/imgindex/buttonup.png"></img>
-        <p id="textbuttonproduct" class="texted centered">PRODUCTS</p>
+        <img id="buttonproduct" src="/resources/imgindex/buttonup.png"></img>
+        <a id="textbuttonproduct" class="texted centered">{{.PRODUCTS}}</a>
     </div>
 
     <div id="contactinformation2">
@@ -105,7 +106,7 @@
         <div class="marginclass"></div>
         
         <div style="width:100%;height: 8px;"></div>
-        <a href="/dueler/" class="opacitychange"><img class="iconsbig2" src="resources/imgindex/dueler.png"></img></a>
+        <a href="/dueler/{{.Refback}}" class="opacitychange"><img class="iconsbig2" src="/resources/imgindex/dueler.png"></img></a>
         <div style="width:100%;height: 18px;"></div>
         <div class="marginclass"></div>
         <div class="underline"></div>
@@ -114,7 +115,7 @@
         
         <div class="marginclass"></div>
         <div style="width:100%;height: 22px;"></div>
-        <a href="/" class="opacitychange"><img class="iconsbig3" src="resources/imgindex/logonamewhite.png"></img></a>
+        <a href="/{{.Refback}}" class="opacitychange"><img class="iconsbig3" src="/resources/imgindex/logonamewhite.png"></img></a>
         <div style="width:100%;height: 18px;"></div>
         <div class="marginclass"></div>
         <div class="underline"></div>
@@ -122,22 +123,25 @@
 
 </div>
 
-<img class="comingsoon" src="resources/imgindex/comingsoon.png"></img>
+<img class="comingsoon" src="/resources/imgindex/comingsoon.png"></img>
 <div id="logoname">
-<img id="logonamepic" src="resources/imgindex/logoname.png"></img>
+<img id="logonamepic" src="/resources/imgindex/logoname.png"></img>
 <div class="marginclass"></div>
 <div class="marginclass"></div>
 <div class="marginclass"></div>
 <div class="marginclass"></div>
-<a class="greytextrightalign">The world's first ingame betting platform based on AI.</a>
+<a class="greytextrightalign">{{.String1}}</a>
 <div></div>
-<a class="greytextrightalign">You can choose an opponent and bet during your</a>
+<a class="greytextrightalign">{{.String2}}</a>
 <div></div>
-<a class="greytextrightalign">favorite game using a convenient interface.</a>
+<a class="greytextrightalign">{{.String3}}</a>
 <div></div>
-<a class="greytextrightalign">And our AI will honestly determine</a>
+<a class="greytextrightalign">{{.String4}}</a>
 <div></div>
-<a class="greytextrightalign">the winner.</a>
+<a class="greytextrightalign">{{.String5}}</a>
 </div>
+<a style="position:absolute; left:306px; top:30px;" href = "{{.Langref}}">
+        <img src="/resources/lang/{{.Lang}}.png" style="height: 35px;" >
+    </a>
 </body>
 </html>

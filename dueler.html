@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>Dueler</title>
-    <link rel="stylesheet" href="../resources/stylecssdueler.css">
-    <link rel="icon" href="../resources/favicon.ico">
+    <link rel="stylesheet" href="/resources/stylecssdueler.css">
+    <link rel="icon" href="/resources/favicon.ico">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/javascript">
     function clickbuttoncont() {
@@ -16,11 +16,11 @@
             if (el5.style.visibility == "visible")
                 el4.click();
             if (el3.style.visibility != "visible") {
-                el.src = "../resources/imgindex/buttondown.png";
+                el.src = "/resources/imgindex/buttondown.png";
                 el2.style.color = "black"
                 el3.style.visibility = "visible";
             } else {
-                el.src = "../resources/imgindex/buttonup.png";
+                el.src = "/resources/imgindex/buttonup.png";
                 el2.style.color = "white"
                 el3.style.visibility = "hidden";
             }
@@ -34,11 +34,11 @@
             if (el5.style.visibility == "visible")
                 el4.click();
             if (el3.style.visibility != "visible") {
-                el.src = "../resources/imgindex/buttondown.png";
+                el.src = "/resources/imgindex/buttondown.png";
                 el2.style.color = "black"
                 el3.style.visibility = "visible";
             } else {
-                el.src = "../resources/imgindex/buttonup.png";
+                el.src = "/resources/imgindex/buttonup.png";
                 el2.style.color = "white"
                 el3.style.visibility = "hidden";
             }
@@ -47,10 +47,13 @@
 </head>
 
 <body>
+        <a style="position:absolute; left:306px; top:30px;" href = "{{.Langref}}">
+                <img src="/resources/lang/{{.Lang}}.png" style="height: 36px;" >
+            </a>
     <div id="divbutton1" value="1">
         <div id="divbutton2" onclick="clickbuttoncont()">
-            <img id="buttoncontact" src="../resources/imgindex/buttonup.png"></img>
-            <p id="textbuttoncontact" class="texted centered">CONTACT US</p>
+            <img id="buttoncontact" src="/resources/imgindex/buttonup.png"></img>
+            <a id="textbuttoncontact" class="texted centered">{{.CONTACTUS}}</a>
         </div>
         <div id="contactinformation">
             <div class="marginclass"></div>
@@ -58,40 +61,40 @@
             <div class="marginclass"></div>
             <div class="underline"></div>
             <div class="marginclass"></div>
-            <div class="textedwhite">Stanislav</div>
-            <div class="textedgray">tech. support</div>
+            <div class="textedwhite">{{.Stanislav}}</div>
+            <div class="textedgray">{{.Techsupport}}</div>
             <div class="marginclass"></div>
             <div>
-                <img class="icons" src="../resources/imgindex/message.png"></img>
+                <img class="icons" src="/resources/imgindex/message.png"></img>
                 <a class="textedgraybigger marginpx">e-mail</a>
             </div>
             <div class="marginclass"></div>
             <div class="underline"></div>
             <div class="marginclass"></div>
-            <div class="textedwhite">Andrey</div>
-            <div class="textedgray">co-founder</div>
+            <div class="textedwhite">{{.Andrey}}</div>
+            <div class="textedgray">{{.cofounder}}</div>
             <div class="marginclass"></div>
             <div>
-                <img class="icons" src="../resources/imgindex/message.png"></img>
+                <img class="icons" src="/resources/imgindex/message.png"></img>
                 <a class="textedgraybigger marginpx">e-mail</a>
             </div>
             <div class="marginclass"></div>
             <div class="underline"></div>
             <div class="marginclass"></div>
             <div class="marginclass"></div>
-            <div class="textedgray">or write to us in social networks</div>
+            <div class="textedgray">{{.networks}}</div>
             <div class="marginclass"></div>
-            <a class="opacitychange" href="http://t.me/SagSaj"><img class="iconsbig" src="../resources/imgindex/telegram.png"></img></a>
-            <a class="opacitychange"> <img class="iconsbig" src="../resources/imgindex/linkedin.png"></img></a>
-            <a class="opacitychange" href="https://www.facebook.com/groups/1952174028425040/"><img class="iconsbig" src="../resources/imgindex/facebook.png"></img></a>
+            <a class="opacitychange" href="http://t.me/SagSaj"><img class="iconsbig" src="/resources/imgindex/telegram.png"></img></a>
+            <a class="opacitychange"> <img class="iconsbig" src="/resources/imgindex/linkedin.png"></img></a>
+            <a class="opacitychange" href="https://www.facebook.com/groups/1952174028425040/"><img class="iconsbig" src="/resources/imgindex/facebook.png"></img></a>
             <div class="underline"></div>
         </div>
 
     </div>
 <div id="divbutton3">
     <div id="divbutton2" onclick="clickbuttonres()">
-        <img id="buttonproduct" src="../resources/imgindex/buttonup.png"></img>
-        <p id="textbuttonproduct" class="texted centered">PRODUCTS</p>
+        <img id="buttonproduct" src="/resources/imgindex/buttonup.png"></img>
+        <a id="textbuttonproduct" class="texted centered">{{.PRODUCTS}}</a>
     </div>
 
     <div id="contactinformation2">
@@ -103,7 +106,7 @@
         <div class="marginclass"></div>
 
         <div style="width:100%;height: 8px;"></div>
-        <a href="/#" class="opacitychange"><img class="iconsbig2" src="../resources/imgindex/dueler.png"></img></a>
+        <a href="/#" class="opacitychange"><img class="iconsbig2" src="/resources/imgindex/dueler.png"></img></a>
         <div style="width:100%;height: 18px;"></div>
         <div class="marginclass"></div>
         <div class="underline"></div>
@@ -112,7 +115,7 @@
 
         <div class="marginclass"></div>
         <div style="width:100%;height: 22px;"></div>
-        <a href="../" class="opacitychange"><img class="iconsbig3" src="../resources/imgindex/logonamewhite.png"></img></a>
+        <a href="/{{.Refback}}" class="opacitychange"><img class="iconsbig3" src="/resources/imgindex/logonamewhite.png"></img></a>
         <div style="width:100%;height: 18px;"></div>
         <div class="marginclass"></div>
         <div class="underline"></div>
@@ -120,106 +123,106 @@
 
 </div>
 <div id="divbutton4">
-    <a href = "../account/register/">
+    <a href = "/account/register/{{.Refback}}" style=" text-decoration: none;">
     <div id="divbutton2100">
-        <img id="buttoncontact" src="../resources/imgindex/buttonup.png"></img>
-        <p id="textbuttonregister" class="texted centered">REGISTER</p>
+        <img id="buttoncontact" src="/resources/imgindex/buttonup.png"></img>
+        <a id="textbuttonregister" class="texted centered">{{.REGISTER}}</a>
     </div>
     </a>
 </div>
 <div id="divbutton5">
-    <a href="http://challenger.userforum.ru">
+    <a href="http://challenger.userforum.ru" style=" text-decoration: none;">
         <div id="divbutton2100">
-            <p id="textbuttonforum" class="texted centered">FORUM</p>
+            <a id="textbuttonforum" class="texted centered">{{.FORUM}}</a>
         </div>
     </a>
 </div>
 <div id="divbutton6">
-    <a href="https://www.youtube.com/watch?v=LiGERMtDGW8" target="_blank">
+    <a href="https://www.youtube.com/watch?v=nMO9b67ShoA" style=" text-decoration: none;" target="_blank">
         <div id="divbutton2100">
-            <p id="textbuttonhowitworks" class="texted centered">HOWITWORKS</p>
+            <a id="textbuttonhowitworks" class="texted centered">{{.HOWITWORKS}}</a>
         </div>
     </a>
 </div>
-<img id="logonamepic" src="../resources/imgindex/dueler.png"></img>
+<img id="logonamepic" src="/resources/imgindex/dueler.png"></img>
 <div id="liderboarddiv">
-        <p  class="texted">LIDERBOARD</p>
+        <p  class="texted">{{.LIDERBOARD}}</p>
         <div></div>
-        <img  src="../resources/img/logicon.png"></img>
+        <img  src="/resources/img/logicon.png"></img>
         <div class="blockPlayer">
             <a class="texted" style="width:300px;">{{.Player1}}</a>
-            <img src="../resources/imgdueler/line.png" style="height:4px;width:{{.Player1Width}}px; display: block;"></img>
+            <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player1Width}}px; display: block;"></img>
         </div>
-        <img style="height: 28px;" src="../resources/imgdueler/prize.png"></img>
-        <a class="texted">7500 gold</a>
+        <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
+        <a class="texted">7500 {{.gold}}</a>
         <div></div>
-        <img src="../resources/img/logicon.png"></img>
+        <img src="/resources/img/logicon.png"></img>
         <div class="blockPlayer">
             <a class="texted" style="width:300px;">{{.Player2}}</a>
-            <img src="../resources/imgdueler/line.png" style="height:4px;width:{{.Player2Width}}px; display: block;"></img>
+            <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player2Width}}px; display: block;"></img>
         </div>
-        <img style="height: 28px;" src="../resources/imgdueler/prize.png"></img>
-        <a class="texted">5000 gold</a>
+        <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
+        <a class="texted">5000 {{.gold}}</a>
         <div></div>
-        <img src="../resources/img/logicon.png"></img>
+        <img src="/resources/img/logicon.png"></img>
         <div class="blockPlayer">
             <a class="texted" style="width:300px;">{{.Player3}}</a>
-            <img src="../resources/imgdueler/line.png" style="height:4px;width:{{.Player3Width}}px; display: block;"></img>
+            <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player3Width}}px; display: block;"></img>
         </div>
-                <img style="height: 28px;" src="../resources/imgdueler/prize.png"></img>
-                <a class="texted">2500 gold</a>
+                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
+                <a class="texted">2500 {{.gold}}</a>
         <div></div>
-        <img src="../resources/img/logicon.png"></img>
+        <img src="/resources/img/logicon.png"></img>
         <div class="blockPlayer">
             <a class="texted" style="width:300px;">{{.Player4}}</a>
-            <img src="../resources/imgdueler/line.png" style="height:4px;width:{{.Player4Width}}px; display: block;"></img>
+            <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player4Width}}px; display: block;"></img>
         </div>
-                <img style="height: 28px;" src="../resources/imgdueler/prize.png"></img>
-                <a class="texted">1000 gold</a>
+                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
+                <a class="texted">1000 {{.gold}}</a>
         <div></div>
-        <img src="../resources/img/logicon.png"></img>
+        <img src="/resources/img/logicon.png"></img>
                                 <div class="blockPlayer">
                                     <a class="texted" style="width:150px;">{{.Player5}}</a>
-                                    <img src="../resources/imgdueler/line.png" style="height:4px;width:{{.Player5Width}}px; display: block;"></img>
+                                    <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player5Width}}px; display: block;"></img>
                                 </div>
-                <img style="height: 28px;" src="../resources/imgdueler/prize.png"></img>
-                <a class="texted">500 gold</a>
+                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
+                <a class="texted">500 {{.gold}}</a>
         <div></div>
-        <img src="../resources/img/logicon.png"></img>
+        <img src="/resources/img/logicon.png"></img>
                 <div class = "blockPlayer">
                     <a class="texted" style="width:150px;">{{.Player6}}</a>
-                    <img src="../resources/imgdueler/line.png" style="height:4px;width:{{.Player6Width}}px; display: block;"></img>
+                    <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player6Width}}px; display: block;"></img>
                 </div>
-                <img style="height: 28px;" src="../resources/imgdueler/prize.png"></img>
-                <a class="texted">500 gold</a>
+                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
+                <a class="texted">500 {{.gold}}</a>
         <div></div>
-        <img src="../resources/img/logicon.png"></img>
+        <img src="/resources/img/logicon.png"></img>
         <div class="blockPlayer">
             <a class="texted" style="width:300px;">{{.Player7}}</a>
-            <img src="../resources/imgdueler/line.png" style="height:4px;width:{{.Player7Width}}px; display: block;"></img>
+            <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player7Width}}px; display: block;"></img>
         </div>
-                <img style="height: 28px;" src="../resources/imgdueler/prize.png"></img>
-                <a class="texted">500 gold</a>
+                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
+                <a class="texted">500 {{.gold}}</a>
         <div></div>
-        <img src="../resources/img/logicon.png"></img>
+        <img src="/resources/img/logicon.png"></img>
         <div class="blockPlayer">
             <a class="texted" style="width:300px;">{{.Player8}}</a>
-            <img src="../resources/imgdueler/line.png" style="height:4px;width:{{.Player8Width}}px; display: block;"></img>
+            <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player8Width}}px; display: block;"></img>
         </div>
-                <img style="height: 28px;" src="../resources/imgdueler/prize.png"></img>
-                <a class="texted">500 gold</a>
+                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
+                <a class="texted">500 {{.gold}}</a>
         <div></div>
-        <img src="../resources/img/logicon.png"></img>
+        <img src="/resources/img/logicon.png"></img>
     <div class="blockPlayer">
         <a class="texted" style="width:300px;">{{.Player9}}</a>
-        <img src="../resources/imgdueler/line.png" style="height:4px;width:{{.Player9Width}}px; display: block;"></img>
+        <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player9Width}}px; display: block;"></img>
     </div>
-                <img style="height: 28px;" src="../resources/imgdueler/prize.png"></img>
-                <a class="texted">500 gold</a>
+                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
+                <a class="texted">500 {{.gold}}</a>
     </div>
 </div>
 <div class="comingsoon">
-    <a class="texted">First tournament: Start December 25, Finish: 5 January </a>
+    <a class="texted"> {{.info}} </a>
 </div>
 
 </body>

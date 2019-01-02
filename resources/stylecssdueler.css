@@ -11,7 +11,7 @@ body {
     background-size: auto 100%; /* Современные браузеры */
     background-color: black;
     font-size: 65%;
-    min-width: 985px;
+    min-width: 1100px;
     width: auto !important;
     min-height: 630px;
    }
@@ -29,36 +29,36 @@ body {
 #divbutton4{
     
     position: absolute;
-    top: 6%;
+    top: 30px;
     right: 50px;
-    width: 118px;
+    width: 138px;
     height: 35px;
 }
 #divbutton5{
     
     position: absolute;
-    top: 6%;
-    right: 178px;
+    top: 30px;
+    right: 193px;
     width: 118px;
     height: 35px;
 }
 #divbutton6{
     position: absolute;
-    top: 6%;
-    right: 306px;
+    top: 30px;
+    right: 346px;
     width: 118px;
     height: 35px;
 }
 #divbutton1{
     position: absolute;
-    top: 6%;
+    top: 30px;
     left: 50px;
     width: 246px;
     height:90%;
 }
 #divbutton3{
     position: absolute;
-    top: 6%;
+    top: 30px;
     left: 178px;
     width: 118px;
     height:90%;
@@ -76,9 +76,11 @@ body {
     cursor: pointer; 
 }
 .centered {
-  position: absolute;
-  left: 8%;
-  top:-30%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap; 
 }
 .texted{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -183,21 +185,7 @@ body {
     transform: translate(-50%,0%);
     margin: auto;
 }
-#textbuttonproduct{
-    margin-left: 4%;
-}
-#textbuttonforum{
-    margin-left: 17%;
-}
-#textbuttonregister{
-    margin-left: 8%;
-}
-#textbuttonhowitworks{
-    margin-left: -5%;
-}
-#textbuttoncontact{
-    margin-left: -3%;
-}
+
 #liderboarddiv{
     position: absolute;
     width: 530px;

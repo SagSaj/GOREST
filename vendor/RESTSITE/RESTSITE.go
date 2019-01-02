@@ -527,7 +527,7 @@ func HandleFunctionIndex(w http.ResponseWriter, r *http.Request) {
 			
 		default: 
 			fullData["Lang"] = "en"
-			fullData["Refback"]= "en/"
+			fullData["Refback"]= ""
 			fullData["CONTACTUS"]= "CONTACT US"
 			fullData["Stanislav"]= "Stanislav"
 			fullData["Techsupport"]= "tech. support"
@@ -608,7 +608,7 @@ func HandleFunctionDueler(w http.ResponseWriter, r *http.Request) {
 			
 		default: 
 			fullData["Lang"] = "en"
-			fullData["Refback"]= "en/"
+			fullData["Refback"]= ""
 			fullData["CONTACTUS"]= "CONTACT US"
 			fullData["Stanislav"]= "Stanislav"
 			fullData["Techsupport"]= "tech. support"

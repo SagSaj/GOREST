@@ -16,12 +16,12 @@ body {
     min-height: 630px;
    }
 #buttoncontact{
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 100%;
 }
 #buttonproduct{
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 100%;
 }

@@ -175,44 +175,42 @@ func HandleFunctionRegistration(w http.ResponseWriter, r *http.Request) {
 		//	log.Println(name)
 		homepageTpl = template.Must(template.New("registration.html").ParseFiles(homepageHTML))
 		id := strings.TrimPrefix(r.URL.Path, "/account/register/")
-		lang:="en"
-		if strings.Contains(id,"ru"){
+		lang := "en"
+		if strings.Contains(id, "ru") {
 			lang = "ru"
 			id = strings.TrimPrefix(id, "ru/")
 		}
 		//	push(w, "/resources/style.css")
 		//	push(w, "/resources/img/background.png")
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		fullData := map[string]interface{}{
-		}
-		switch  lang {
+		fullData := map[string]interface{}{}
+		switch lang {
 		case "ru":
 			fullData = map[string]interface{}{
-				"Referal": id,
-				"Host":    r.Host,
-				"Succesfull": "Регистрация прошла успешно.",
-				"DOWNLOAD": "СКАЧАТЬ",
-				"Registration": "РЕГИСТРАЦИЯ",
-				"Password": "Пароль",
+				"Referal":         id,
+				"Host":            r.Host,
+				"Succesfull":      "Регистрация прошла успешно.",
+				"DOWNLOAD":        "СКАЧАТЬ",
+				"Registration":    "РЕГИСТРАЦИЯ",
+				"Password":        "Пароль",
 				"Confirmpassword": "Подвердите пароль",
-				"Lang":"ru",
-				"Langref":"/account/register/"+id,
-				"Refback": "ru/",
+				"Lang":            "ru",
+				"Langref":         "/account/register/" + id,
+				"Refback":         "ru/",
 			}
-		default: 
-		fullData = map[string]interface{}{
-			"Referal": id,
-			"Host":    r.Host,
-			"Succesfull": "Rigistration is succesfull.",
-			"DOWNLOAD": "DOWNLOAD",
-			"Registration": "Registration",
-			"Password": "Password",
-			"Confirmpassword": "Confirm password",
-			"Lang":"en",
-			"Langref":"/account/register/ru/"+id,
+		default:
+			fullData = map[string]interface{}{
+				"Referal":         id,
+				"Host":            r.Host,
+				"Succesfull":      "Rigistration is succesfull.",
+				"DOWNLOAD":        "DOWNLOAD",
+				"Registration":    "Registration",
+				"Password":        "Password",
+				"Confirmpassword": "Confirm password",
+				"Lang":            "en",
+				"Langref":         "/account/register/ru/" + id,
+			}
 		}
-		}
-		
 
 		render(w, r, homepageTpl, "registration.html", fullData)
 	} else {
@@ -502,45 +500,45 @@ func HandleFunctionIndex(w http.ResponseWriter, r *http.Request) {
 		fullData := map[string]interface{}{
 			"Host": r.Host,
 		}
-		lang:="en"
-		if strings.Contains(r.URL.Path,"ru"){
+		lang := "en"
+		if strings.Contains(r.URL.Path, "ru") {
 			lang = "ru"
 		}
-		switch  lang {
+		switch lang {
 		case "ru":
 			fullData["Lang"] = "ru"
-			fullData["Refback"]= "ru/"
-			fullData["Langref"]="/"
-			fullData["CONTACTUS"]= "КОНТАКТЫ"
-			fullData["Stanislav"]= "Станислав"
-			fullData["Techsupport"]= "тех. поддержка"
-						
-			fullData["Andrey"]= "Андрей"
-			fullData["cofounder"]= "соискатель"
-			fullData["networks"]= "или напишите нам в социальных сетях"
-			fullData["PRODUCTS"]= "ПРОЕКТЫ"
-			fullData["String1"]= "Первая в мире внутриигровая беттинговая платформа основанная на ИИ."
-			fullData["String2"]= "Ты можешь выбрать противника и поставить в процессе твоей"
-			fullData["String3"]= "любимой игры используя удобный интерфейс."
-			fullData["String4"]= "И наш ИИ честно определяет"
-			fullData["String5"]= "победителя."
-			
-		default: 
+			fullData["Refback"] = "ru/"
+			fullData["Langref"] = "/"
+			fullData["CONTACTUS"] = "КОНТАКТЫ"
+			fullData["Stanislav"] = "Станислав"
+			fullData["Techsupport"] = "тех. поддержка"
+
+			fullData["Andrey"] = "Андрей"
+			fullData["cofounder"] = "соискатель"
+			fullData["networks"] = "или напишите нам в социальных сетях"
+			fullData["PRODUCTS"] = "ПРОЕКТЫ"
+			fullData["String1"] = "Первая в мире внутриигровая беттинговая платформа основанная на ИИ."
+			fullData["String2"] = "Ты можешь выбрать противника и поставить в процессе твоей"
+			fullData["String3"] = "любимой игры используя удобный интерфейс."
+			fullData["String4"] = "И наш ИИ честно определяет"
+			fullData["String5"] = "победителя."
+
+		default:
 			fullData["Lang"] = "en"
-			fullData["Refback"]= ""
-			fullData["CONTACTUS"]= "CONTACT US"
-			fullData["Stanislav"]= "Stanislav"
-			fullData["Techsupport"]= "tech. support"
-			fullData["Langref"]="/ru/"
-			fullData["Andrey"]= "Andrey"
-			fullData["cofounder"]= "co-founder"
-			fullData["networks"]= "or write to us in social networks"
-			fullData["PRODUCTS"]= "PRODUCTS"
-			fullData["String1"]= "The world's first ingame betting platform based on AI."
-			fullData["String2"]= "You can choose an opponent and bet during your"
-			fullData["String3"]= "favorite game using a convenient interface."
-			fullData["String4"]= "And our AI will honestly determine"
-			fullData["String5"]= "the winner."
+			fullData["Refback"] = ""
+			fullData["CONTACTUS"] = "CONTACT US"
+			fullData["Stanislav"] = "Stanislav"
+			fullData["Techsupport"] = "tech. support"
+			fullData["Langref"] = "/ru/"
+			fullData["Andrey"] = "Andrey"
+			fullData["cofounder"] = "co-founder"
+			fullData["networks"] = "or write to us in social networks"
+			fullData["PRODUCTS"] = "PRODUCTS"
+			fullData["String1"] = "The world's first ingame betting platform based on AI."
+			fullData["String2"] = "You can choose an opponent and bet during your"
+			fullData["String3"] = "favorite game using a convenient interface."
+			fullData["String4"] = "And our AI will honestly determine"
+			fullData["String5"] = "the winner."
 		}
 		render(w, r, homepageTpl, "index.html", fullData)
 	} else {
@@ -582,47 +580,47 @@ func HandleFunctionDueler(w http.ResponseWriter, r *http.Request) {
 			"Player9":      l[8].Login + "    " + fmt.Sprintf("%.0f", l[8].Balance) + "  Points",
 			"Player9Width": l[8].Balance / l[0].Balance * 300,
 		}
-		lang:="en"
-		if strings.Contains(r.URL.Path,"ru"){
+		lang := "en"
+		if strings.Contains(r.URL.Path, "ru") {
 			lang = "ru"
 		}
-		switch  lang {
+		switch lang {
 		case "ru":
 			fullData["Lang"] = "ru"
-			fullData["Refback"]= "ru/"
-			fullData["Langref"]="/dueler/"
-			fullData["CONTACTUS"]= "КОНТАКТЫ"
-			fullData["Stanislav"]= "Станислав"
-			fullData["Techsupport"]= "тех. поддержка"
-						
-			fullData["Andrey"]= "Андрей"
-			fullData["cofounder"]= "соискатель"
-			fullData["networks"]= "или напишите нам в социальных сетях"
-			fullData["PRODUCTS"]= "ПРОЕКТЫ"
-			fullData["REGISTER"]= "РЕГИСТРАЦИЯ"
-			fullData["FORUM"]= "ФОРУМ"
-			fullData["HOWITWORKS"]= "КАКЭТОРАБОТАЕТ"
-			fullData["LIDERBOARD"]= "ТАБЛИЦА ЛИДЕРОВ"
-			fullData["gold"]= "золота"
-			fullData["info"]= "Первый чемпионат: старт - 5 января, финиш - 15 января"
-			
-		default: 
+			fullData["Refback"] = "ru/"
+			fullData["Langref"] = "/dueler/"
+			fullData["CONTACTUS"] = "КОНТАКТЫ"
+			fullData["Stanislav"] = "Станислав"
+			fullData["Techsupport"] = "тех. поддержка"
+
+			fullData["Andrey"] = "Андрей"
+			fullData["cofounder"] = "соискатель"
+			fullData["networks"] = "или напишите нам в социальных сетях"
+			fullData["PRODUCTS"] = "ПРОЕКТЫ"
+			fullData["REGISTER"] = "РЕГИСТРАЦИЯ"
+			fullData["FORUM"] = "ФОРУМ"
+			fullData["HOWITWORKS"] = "КАКЭТОРАБОТАЕТ"
+			fullData["LIDERBOARD"] = "ТАБЛИЦА ЛИДЕРОВ"
+			fullData["gold"] = "золота"
+			fullData["info"] = "Первый чемпионат: старт - 5 января, финиш - 15 января"
+
+		default:
 			fullData["Lang"] = "en"
-			fullData["Refback"]= ""
-			fullData["CONTACTUS"]= "CONTACT US"
-			fullData["Stanislav"]= "Stanislav"
-			fullData["Techsupport"]= "tech. support"
-			fullData["Langref"]="/dueler/ru/"
-			fullData["Andrey"]= "Andrey"
-			fullData["cofounder"]= "co-founder"
-			fullData["networks"]= "or write to us in social networks"
-			fullData["PRODUCTS"]= "PRODUCTS"
-			fullData["REGISTER"]= "REGISTER"
-			fullData["FORUM"]= "FORUM"
-			fullData["HOWITWORKS"]= "HOWITWORKS"
-			fullData["LIDERBOARD"]= "LIDERBOARD"
-			fullData["gold"]= "gold"
-			fullData["info"]= "First tournament: Start January 5, Finish: January 15"
+			fullData["Refback"] = ""
+			fullData["CONTACTUS"] = "CONTACT US"
+			fullData["Stanislav"] = "Stanislav"
+			fullData["Techsupport"] = "tech. support"
+			fullData["Langref"] = "/dueler/ru/"
+			fullData["Andrey"] = "Andrey"
+			fullData["cofounder"] = "co-founder"
+			fullData["networks"] = "or write to us in social networks"
+			fullData["PRODUCTS"] = "PRODUCTS"
+			fullData["REGISTER"] = "REGISTER"
+			fullData["FORUM"] = "FORUM"
+			fullData["HOWITWORKS"] = "HOWITWORKS"
+			fullData["LIDERBOARD"] = "LEADERBOARD"
+			fullData["gold"] = "gold"
+			fullData["info"] = "First tournament: Start January 5, Finish: January 15"
 		}
 		render(w, r, homepageTpl, "dueler.html", fullData)
 	} else {

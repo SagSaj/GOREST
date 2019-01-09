@@ -121,7 +121,7 @@ func RegistrNewPerson(login, password string) (LoginInformation, error) {
 	if b {
 		return def, errors.New("Exist")
 	}
-	l := LoginInformation{Login: login, Password: password, Balance: 20, WinCount: 0, LoseCount: 0}
+	l := LoginInformation{Login: login, Password: password, Balance: 40, WinCount: 0, LoseCount: 0}
 	c := session.DB(dBName).C("persons")
 	err = c.Insert(&l)
 	if err != nil {
@@ -154,7 +154,7 @@ func RegistrNewPersonWithID(login, password string, ID int) (LoginInformation, e
 		return def, errors.New("Exist")
 	}
 	log.Println("Add")
-	l := LoginInformation{Login: login, Password: password, Balance: 20, WinCount: 0, LoseCount: 0, IDAccount: ID}
+	l := LoginInformation{Login: login, Password: password, Balance: 40, WinCount: 0, LoseCount: 0, IDAccount: ID}
 	c := session.DB(dBName).C("persons")
 	err = c.Insert(&l)
 

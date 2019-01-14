@@ -170,12 +170,12 @@
     
         <p  class="texted">{{.LIDERBOARD}}</p>
         <div></div>
-        {{range .PlayersPoints}}
+        {{range $i,$a := .PlayersPoints}}
             <img  src="/resources/img/logicon.png"></img>
             <div class="blockPlayer">
-                <a class="texted" style="width:300px;">{{.Login}}</a><a class="texted" style="float: right;">{{.Balance}}&#160;{{$.Points}}</a>
+                <a class="texted" style="width:300px;">{{$i}}. {{$a.Login}}</a><a class="texted" style="float: right;">{{$a.Balance}}&#160;{{$.Points}}</a>
                 <div style="width:100%;height: 4px;"></div>
-                <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.|Width}}px; display: block;"></img>
+                <img src="/resources/imgdueler/line.png" style="height:4px;width:{{$a|Width}}px; display: block;"></img>
             </div>
             <div class="marginclass"></div>
         {{end}}

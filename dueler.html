@@ -167,83 +167,22 @@
 </div>
 <img id="logonamepic" src="/resources/imgindex/dueler.png"></img>
 <div id="liderboarddiv">
+    
         <p  class="texted">{{.LIDERBOARD}}</p>
         <div></div>
-        <img  src="/resources/img/logicon.png"></img>
-        <div class="blockPlayer">
-            <a class="texted" style="width:300px;">{{.Player1}}</a>
-            <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player1Width}}px; display: block;"></img>
-        </div>
-        <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
-        <a class="texted">7500 {{.gold}}</a>
-        <div></div>
-        <img src="/resources/img/logicon.png"></img>
-        <div class="blockPlayer">
-            <a class="texted" style="width:300px;">{{.Player2}}</a>
-            <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player2Width}}px; display: block;"></img>
-        </div>
-        <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
-        <a class="texted">5000 {{.gold}}</a>
-        <div></div>
-        <img src="/resources/img/logicon.png"></img>
-        <div class="blockPlayer">
-            <a class="texted" style="width:300px;">{{.Player3}}</a>
-            <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player3Width}}px; display: block;"></img>
-        </div>
-                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
-                <a class="texted">2500 {{.gold}}</a>
-        <div></div>
-        <img src="/resources/img/logicon.png"></img>
-        <div class="blockPlayer">
-            <a class="texted" style="width:300px;">{{.Player4}}</a>
-            <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player4Width}}px; display: block;"></img>
-        </div>
-                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
-                <a class="texted">1000 {{.gold}}</a>
-        <div></div>
-        <img src="/resources/img/logicon.png"></img>
-                                <div class="blockPlayer">
-                                    <a class="texted" style="width:150px;">{{.Player5}}</a>
-                                    <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player5Width}}px; display: block;"></img>
-                                </div>
-                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
-                <a class="texted">500 {{.gold}}</a>
-        <div></div>
-        <img src="/resources/img/logicon.png"></img>
-                <div class = "blockPlayer">
-                    <a class="texted" style="width:150px;">{{.Player6}}</a>
-                    <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player6Width}}px; display: block;"></img>
-                </div>
-                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
-                <a class="texted">500 {{.gold}}</a>
-        <div></div>
-        <img src="/resources/img/logicon.png"></img>
-        <div class="blockPlayer">
-            <a class="texted" style="width:300px;">{{.Player7}}</a>
-            <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player7Width}}px; display: block;"></img>
-        </div>
-                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
-                <a class="texted">500 {{.gold}}</a>
-        <div></div>
-        <img src="/resources/img/logicon.png"></img>
-        <div class="blockPlayer">
-            <a class="texted" style="width:300px;">{{.Player8}}</a>
-            <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player8Width}}px; display: block;"></img>
-        </div>
-                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
-                <a class="texted">500 {{.gold}}</a>
-        <div></div>
-        <img src="/resources/img/logicon.png"></img>
-    <div class="blockPlayer">
-        <a class="texted" style="width:300px;">{{.Player9}}</a>
-        <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.Player9Width}}px; display: block;"></img>
-    </div>
-                <img style="height: 28px;" src="/resources/imgdueler/prize.png"></img>
-                <a class="texted">500 {{.gold}}</a>
-    </div>
+        {{range .PlayersPoints}}
+            <img  src="/resources/img/logicon.png"></img>
+            <div class="blockPlayer">
+                <a class="texted" style="width:300px;">{{.Login}}</a><a class="texted" style="float: right;">{{.Balance}}&#160;{{$.Points}}</a>
+                <div style="width:100%;height: 4px;"></div>
+                <img src="/resources/imgdueler/line.png" style="height:4px;width:{{.|Width}}px; display: block;"></img>
+            </div>
+            <div class="marginclass"></div>
+        {{end}}
+        
 </div>
-<div class="comingsoon">
-    <a class="texted"> {{.info}} </a>
+<div class="comingsoon" style="text-align:center;">
+    <a class="texted" > {{.info}} </a>
 </div>
 
 </body>

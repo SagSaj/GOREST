@@ -546,39 +546,37 @@ func HandleFunctionIndex(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 	}
 }
+
+var firstpl float32 = 300
+
+func WidthCount(args ...interface{}) string {
+	var s subdmongo.LoginInformation
+	if len(args) == 1 {
+		s, _ = args[0].(subdmongo.LoginInformation)
+	}
+	ito := s.Balance / firstpl * 300
+	return fmt.Sprintf("%d", int(ito))
+}
 func HandleFunctionDueler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		homepageHTML := "dueler.html"
 		//log.Println(r.URL)
 		//	name := path.Base(homepageHTML)
 		//	log.Println(name)
-		homepageTpl = template.Must(template.New("dueler.html").ParseFiles(homepageHTML))
-
+		t := template.New("dueler.html")
+		t = t.Funcs(template.FuncMap{"Width": WidthCount})
+		homepageTpl = template.Must(t.ParseFiles(homepageHTML))
 		//	push(w, "/resources/style.css")
 		//	push(w, "/resources/img/background.png")
 
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		l := subdmongo.GetTop9Players()
+		l := subdmongo.GetTopPlayers()
+		//l[1].Balance / l[0].Balance * 300
+		firstpl = l[0].Balance
 		fullData := map[string]interface{}{
-			"Host":         r.Host,
-			"Player1":      l[0].Login + "    " + fmt.Sprintf("%.0f", l[0].Balance) + "  Points",
-			"Player1Width": 300,
-			"Player2":      l[1].Login + "    " + fmt.Sprintf("%.0f", l[1].Balance) + "  Points",
-			"Player2Width": l[1].Balance / l[0].Balance * 300,
-			"Player3":      l[2].Login + "    " + fmt.Sprintf("%.0f", l[2].Balance) + "  Points",
-			"Player3Width": l[2].Balance / l[0].Balance * 300,
-			"Player4":      l[3].Login + "    " + fmt.Sprintf("%.0f", l[3].Balance) + "  Points",
-			"Player4Width": l[3].Balance / l[0].Balance * 300,
-			"Player5":      l[4].Login + "    " + fmt.Sprintf("%.0f", l[4].Balance) + "  Points",
-			"Player5Width": l[4].Balance / l[0].Balance * 300,
-			"Player6":      l[5].Login + "    " + fmt.Sprintf("%.0f", l[5].Balance) + "  Points",
-			"Player6Width": l[5].Balance / l[0].Balance * 300,
-			"Player7":      l[6].Login + "    " + fmt.Sprintf("%.0f", l[6].Balance) + "  Points",
-			"Player7Width": l[6].Balance / l[0].Balance * 300,
-			"Player8":      l[7].Login + "    " + fmt.Sprintf("%.0f", l[7].Balance) + "  Points",
-			"Player8Width": l[7].Balance / l[0].Balance * 300,
-			"Player9":      l[8].Login + "    " + fmt.Sprintf("%.0f", l[8].Balance) + "  Points",
-			"Player9Width": l[8].Balance / l[0].Balance * 300,
+			"Host":           r.Host,
+			"PlayersPoints":  l,
+			"Player1Balance": l[0].Balance,
 		}
 		lang := "en"
 		if strings.Contains(r.URL.Path, "ru") {
@@ -602,8 +600,8 @@ func HandleFunctionDueler(w http.ResponseWriter, r *http.Request) {
 			fullData["HOWITWORKS"] = "КАКЭТОРАБОТАЕТ"
 			fullData["LIDERBOARD"] = "ТАБЛИЦА ЛИДЕРОВ"
 			fullData["gold"] = "золота"
-			fullData["info"] = "Первый чемпионат: старт - 5 января, финиш - 15 января"
-
+			fullData["info"] = "Каждый вновь зарегистрированный Игрок получает в подарок 20 баллов; Поделившийся модом получает 1 балл за каждого зарегистрированного и сыгравшего один бой со ставкой; Старт каждый день- 3:00, финиш - 3:00 следующего дня."
+			fullData["Points"] = "очков"
 		default:
 			fullData["Lang"] = "en"
 			fullData["Refback"] = ""
@@ -618,9 +616,10 @@ func HandleFunctionDueler(w http.ResponseWriter, r *http.Request) {
 			fullData["REGISTER"] = "REGISTER"
 			fullData["FORUM"] = "FORUM"
 			fullData["HOWITWORKS"] = "HOWITWORKS"
-			fullData["LIDERBOARD"] = "LEADERBOARD"
+			fullData["LIDERBOARD"] = "LIDERBOARD"
 			fullData["gold"] = "gold"
-			fullData["info"] = "First tournament: Start January 5, Finish: January 15"
+			fullData["info"] = "Each newly registered Player receives a gift of 20 points; A shared mod gets 1 point for each one registered and playing one battle with a bet; Start each days - 3:00 am, finish - 3:00 am next day."
+			fullData["Points"] = "points"
 		}
 		render(w, r, homepageTpl, "dueler.html", fullData)
 	} else {

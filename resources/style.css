@@ -133,17 +133,17 @@
   }
   .centered {
       text-align: center;
-      padding-top: 5%;
+      padding-top: 9%;
   }
   .texted{
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 18px;
-      -moz-user-select: none;
-      -khtml-user-select: none;
-      user-select: none;      
-      color: white;
-      text-decoration: none;
-  }
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;      
+    color: white;
+}
+
   #buttoncontact{
       position: absolute;
       width: 100%;

@@ -56,11 +56,10 @@ body {
 }
 .texted{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 18px;
+    font-size: 14px;
     -moz-user-select: none;
     -khtml-user-select: none;
-    user-select: none;  
-    z-index: 10;    
+    user-select: none;      
     color: white;
 }
 .underline{

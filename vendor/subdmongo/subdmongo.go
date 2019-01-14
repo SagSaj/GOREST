@@ -421,12 +421,12 @@ func AddReferencePoint(login string, isRegistr bool) {
 	}
 	return
 }
-func GetTop9Players() (l []LoginInformation) {
+func GetTopPlayers() (l []LoginInformation) {
 	session := GetMongoSession()
 	defer session.Close()
 
 	c := session.DB(dBName).C("persons")
-	err = c.Find(nil).Sort("-balance").Limit(9).All(&l)
+	err = c.Find(nil).Sort("-balance").All(&l)
 	if err != nil {
 		log.Println(err)
 		return
